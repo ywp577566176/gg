@@ -1,0 +1,233 @@
+﻿
+@{
+    Layout = null;
+}
+<style>
+    .la {
+        margin-left: -50px;
+    }
+</style>
+<div class="templatemo-content-wrapper">
+    <div class="templatemo-content">
+        <ol class="breadcrumb">
+            <li><a href="index.html">Admin Panel</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li class="active">Overview</li>
+            <li><a href="sign-in.html">Sign In Form</a></li>
+        </ol>
+        <h1>Dashboard</h1>
+        <div class="margin-bottom-30">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills">
+                        <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+                        <li class="active"><a href="#">Profile <span class="badge">126</span></a></li>
+                        <li class="active"><a href="#">Messages <span class="badge">14</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>      
+        <button type="button" id="addSchool" class="btn btn-default" data-toggle="modal" data-target="#Modal" data-backdrop="static">新增</button>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>专业名称</th>
+                    <th>专业描述</th>                  
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li class="disabled"><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&raquo;</a></li>
+
+        </ul>
+
+    </div>
+
+</div>
+<div style="margin:15% auto" class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="txtAddShopName" class="col-md-4 control-label">专业名称：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="specialty_Name" name="Specialty_Name" placeholder="请添加校区代码">
+                        </div>
+                    </div>                 
+                  
+
+                    <div class="form-group">
+                        <label for="txtAddShopRemark" class="col-md-4 control-label">专业描述：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="sDescription" name="Specialty_Description" value="" placeholder="备注添加可以为空">
+                        </div>
+                    </div>
+                    <div class="form-group" style="display:none">
+                        <div>
+                            <input type='text' id="s_ID" name='Specialty_ID' value="0">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> 关 闭</button>
+                <button type="button" class="btn btn-primary" id="Save"><i class="fa fa-floppy-o"></i> 提 交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script>
+        //删除校区函数
+        function del(sID, pageIndex) {
+            $.getJSON("/Specialties/Del", { sID: sID }, function (res) {
+                if (res ==true)
+                {
+                        Serach(pageIndex);
+                }
+                else
+                {
+                    alert(res);
+                }
+            });
+
+        };
+        //修改校区函数
+        function update(Specialties)
+        {
+            $("#Modal").modal("show");
+           
+            $("#myModalLabel").text("修改专业");
+            $("#specialty_Name").val(Specialties.Specialty_Name);
+            $("#sDescription").val(Specialties.Specialty_Description);
+            $("#s_ID").val(Specialties.Specialty_ID);
+            
+            
+        }
+        //查询数据
+        function Serach(pageIndex) {
+             
+            $(".table").attr("page", pageIndex);
+            $.get("/Specialties/GetSpecialties", {pageIndex: pageIndex }, function (res) {
+                $(".table tbody").empty();
+                if (res.rows.length == 0)
+                {
+                    if (pageIndex > 1)
+                        Serach(pageIndex - 1);
+                }
+                else
+                {
+                    for (var t = 0; t < res.rows.length; t++) {
+                        var add = $("<tr>" +
+                                "<td>" + res.rows[t].Specialty_Name + "</td>" +
+                                "<td>" + res.rows[t].Specialty_Description + "</td>" +
+                                "<td><button onclick=update(" + JSON.stringify(res.rows[t]).replace(/\"/g, "'") + ") type=\"button\" class=\"btn btn-success\">修改</button><button type=\"button\" onclick=\"del('" + res.rows[t].Specialty_ID + "','" + pageIndex + "')\" class=\"btn btn-danger\">删除</button></td>" +
+                                "</tr>"
+                        )
+                        $(".table tbody").append(add);                                            
+                    }
+                    if (res.rows.length < 5)
+                    {
+                        for (var t = res.rows.length; t < 5; t++) {
+                           
+                            $(".table tbody").append("<tr><td>&nbsp</td><td></td></tr>");
+                        }
+                    }
+                    $(".pagination").empty();
+                    if (pageIndex == 1)
+                        $(".pagination").append("<li class=\"disabled\" ><a href=\"#\">&laquo;</a></li>");
+                    else
+                        $(".pagination").append("<li onclick=\"Serach(1)\" ><a href=\"#\">&laquo;</a></li>");
+                    if (pageIndex > 3) {
+                        for (var t = pageIndex - 2; t < pageIndex + 3; t++) {
+
+                            if (pageIndex == t)
+                                $(".pagination").append("<li  class=\"active\"><a href=\"#\">" + t + "</a></li>");
+                            else
+                                $(".pagination").append("<li onclick=\"Serach(" + t + ")\"> <a href=\"#\">" + t + "</a></li>");
+                            if (t == res.total) {
+                                break;
+                            }
+
+                        }
+                    }
+                    else {
+                        for (var t = 1; t <= res.total; t++) {
+                            if (pageIndex == t)
+                                $(".pagination").append("<li  class=\"active\"><a href=\"#\">" + t + "</a></li>");
+                            else
+                                $(".pagination").append("<li onclick=\"Serach(" + t + ")\" >  <a href=\"#\">" + t + "</a></li>");
+                            if (t == 5) {
+                                break;
+                            }
+                        }
+                    }
+                    if (pageIndex == res.total)
+                        $(".pagination").append("<li class=\"disabled\"><a href=\"#\">&raquo;</a></li>");
+                    else
+                        $(".pagination").append("<li onclick=\"Serach(" + res.total + ")\" ><a href=\"#\">&raquo;</a></li>");
+                }
+
+
+            });
+
+        }       
+        $().ready(function () {
+            Serach(1);         
+            $("#Save").click(function () {
+              
+                if ($("#specialty_Name").val() == "")
+                {
+                    alert("专业名字不能为空");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Specialties/AddOrUpdate",
+                    type: "post",
+                    async: true,
+                    data: $(".form-horizontal").serialize(),
+                    dataType: "text",
+                    success: function (res) {
+                        if(res=="update")
+                        {
+                            $("#Modal").modal("hide");
+                            Serach($(".table").attr("page"));
+                        }
+                        else if(res=="add")
+                        {
+                            $("#Modal").modal("hide");
+                            Serach(1);
+                        }
+                        else
+                        {
+                            alert(res);
+                        }
+
+                    }
+                });
+
+            });
+            $("#addSchool").click(function () {
+
+                $("#myModalLabel").text("新增专业");
+                $("#specialty_Name").val("");
+                $("#sDescription").val("");
+                $("#s_ID").val("");
+               
+            });
+        });
+</script>

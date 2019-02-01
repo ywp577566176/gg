@@ -1,0 +1,206 @@
+﻿
+@{
+    Layout = null;
+}
+<style>
+    .la {
+        margin-left: -50px;
+    }
+</style>
+<div id="getSchools">
+    <div class="templatemo-content-wrapper">
+        <div class="templatemo-content" >
+            <ol class="breadcrumb">
+                <li><a href="index.html">Admin Panel</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li class="active">Overview</li>
+                <li><a href="sign-in.html">Sign In Form</a></li>
+            </ol>
+            <h1>Dashboard</h1>
+            <div class="margin-bottom-30">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-pills">
+                            <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+                            <li class="active"><a href="#">Profile <span class="badge">126</span></a></li>
+                            <li class="active"><a href="#">Messages <span class="badge">14</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+           
+            <form class="form-horizontal" role="form">
+                <label>省份名称：</label>
+                <select v-model="pID">
+                    <option value="0">==请选择==</option>
+                    <option v-for="Pro in ProvincesList" :value="Pro.P_ID">{{Pro.P_Name}}</option>
+                </select>
+                <label>校区名称：</label>
+                <input type="text" v-model="sName"
+                       placeholder="请输入查询校园名称">
+                <label>{{sName}}</label>
+
+                <button type="button" v-on:click="getSchool()" class="btn btn-default">查询</button>
+            </form>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>校园代码</th>
+                        <th>校园名称</th>
+                        <th>省份名称</th>
+                        <th>校区备注</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="school in schoolsList">
+                        <td>{{school.School_Code}}</td>
+                        <td>{{school.School_Name}}</td>
+                        <td>{{school.P_Name}}</td>
+                        <td>{{school.School_Remark}}</td>
+                        <td><button value="school.School_ID" type="button">查看</button><button data-toggle="modal" v-on:click="SpecialtiesShow" data-target="#Modal" data-backdrop="static">导入excel</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li class="active"><a href="#">1</a></li>
+                <li class="disabled"><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">&raquo;</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+    <div style="margin:15% auto" class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Excel导入</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="/Students/ImportExcel" method="post" enctype="multipart/form-data" target="hidden_frame">
+                        <div style="margin:0 auto;width:60%">
+                            <label>专业：</label>
+                            <select v-model="StyID" name="Specialty_ID">
+                                <option value="0">==请选择==</option>
+                                <option v-for="Specialty in Specialties" value="Specialty.Specialty_ID">{{Specialty.Specialty_Name}}</option>
+                            </select><br />
+                            <label>文件：</label>
+                            <input style="display:inline" type="file" name="file" />
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> 关 闭</button>
+                            <button type="submit" class="btn btn-primary" id="Save"><i class="fa fa-floppy-o"></i> 提 交</button>
+                        </div>
+                        <div class="modal-footer">
+                            <div id="firstUploadSucceed" style="display:none">
+                                <strong>新增成功</strong><span id="firstUploadSucceeMsg"></span>
+                            </div>
+                            <div id="firstUploadFailed" style="display:none">
+                                <strong>对不起，新增失败</strong><span id="firstUploadFailedMsg"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+               
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+
+<script>
+    var v = new Vue({
+        el: "#getSchools",
+        data: {
+            ProvincesList:[],
+            schoolsList: [],
+            Specialties: [],
+            pID: 0,
+            sName:"",
+            StyID:0
+        },
+        mounted() {
+            this.provincesShow();
+            this.getSchool();
+        },
+        methods: {
+            //获取学校数据     
+            getSchool: function () {
+               var myData = this;
+                
+                axios.get('/Schools/GetView_SchoolS', {
+                    params: {
+                        pID: myData.pID, sName: myData.sName, pageIndex: 1
+                    } 
+                }).then(function (res) {
+                    myData.schoolsList = res.data.rows;
+                  
+
+                }).catch(
+                Error=>
+                    alert("错误")
+                );
+            },
+            //绑定省份下拉框
+            provincesShow: function () {              
+                var myData = this;
+                //$.getJSON("http://localhost:3216/api/Values", function (res) {
+                //    myData.ProvincesList = res;
+
+                //})
+                axios.post("/Schools/GetProvinces")
+               
+                //axios.get("http://localhost:3216/api/Values")
+                .then(
+                function (res) {
+                    myData.ProvincesList = res.data;
+                   
+                })
+                .catch(
+                Error=>alert("错误")
+                );
+               // axios.post("http://localhost:3216/api/Values")
+               //.then(
+               //function (res) {
+               //    alert(res);
+
+               //})
+               //.catch(
+               //Error=>alert("错误0")
+                //)
+               
+                //$.post("http://localhost:3216/api/Values", function (res) {
+                //    alert(JSON.stringify(res));
+
+                //}).error(function (res) {
+                //    alert(JSON.stringify(res));
+                //})
+
+               
+            },
+            //绑定专业下拉框
+            SpecialtiesShow: function () {
+                var myData = this;
+                axios.post("/Specialties/DdlSpecialties")
+                    .then(function(res){
+                        myData.Specialties = res.data;
+                      
+                    })
+            }
+
+        }
+
+    });
+
+   
+
+   
+</script>

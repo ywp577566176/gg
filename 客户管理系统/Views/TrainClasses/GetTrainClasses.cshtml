@@ -1,0 +1,402 @@
+﻿
+@{
+    Layout = null;
+}
+<style>
+    .la {
+        margin-left: -50px;
+    }
+</style>
+<div class="templatemo-content-wrapper">
+    <div class="templatemo-content">
+        <ol class="breadcrumb">
+            <li><a href="index.html">Admin Panel</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li class="active">Overview</li>
+            <li><a href="sign-in.html">Sign In Form</a></li>
+        </ol>
+        <h1>Dashboard</h1>
+        <div class="margin-bottom-30">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills">
+                        <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+                        <li class="active"><a href="#">Profile <span class="badge">126</span></a></li>
+                        <li class="active"><a href="#">Messages <span class="badge">14</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <form class="form-horizontal" role="form">         
+                <div class="form-group col-sm-3">
+                         <label for="firstname" class="col-sm-4 control-label">班级名称：</label>
+                         <div class="col-sm-8">
+                                <input type="text" class="form-control" id="tName"placeholder="请输入班级名称">
+                         </div>
+                    
+                </div>
+
+                
+                <div class="form-group col-sm-2">
+                    <label>教师：</label>
+                    <input type="radio" checked="checked" name="sName" value="1">教员
+                    <input type="radio" name="sName" value="2">督导
+                    <select id="setThacher">
+                        <option value="">==请选择==</option>
+                    </select>
+                </div>
+
+                <button type="button" id="searchTrainClasses" class="btn btn-default">查询</button>
+                <button type="button" id="addTrainClasses" class="btn btn-default" data-toggle="modal" data-target="#Modal" data-backdrop="static">新增</button>
+            </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>实训班级名称</th>
+                    <th>进入实训时间</th>
+                    <th>景宁就业时间</th>
+                    <th>实训允许最大人数</th>
+                    <th>实际男生人数</th>
+                    <th>实际女生人数</th>
+                    <th>实训周期</th>
+                    <th>教员</th>
+                    <th>督导</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <ul class="pagination">
+            @*<li><a href="#">&laquo;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li class="disabled"><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&raquo;</a></li>*@
+
+        </ul>
+
+    </div>
+
+</div>
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="txtAddShopName" class="col-md-4 control-label">班级名称：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="addName" name="TC_Name" placeholder="请添加班级名称">
+                        </div>
+                    </div>
+                    <div class="form-group" id="divTGrade" style="display:none">
+                        <label for="txtAddShopPerson" class="col-md-4 control-label">年级：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="tGrade" name="TC_Grade" placeholder="请添加年级">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtAddShopPerson" class="col-md-4 control-label">实训开始时间：</label>
+                        <div class="col-lg-6">
+                            <input type="date" class="form-control m-b-10"  id="tBeginTime" name="TC_BeginTime" placeholder="请添加实训开始时间">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtAddShopPerson" class="col-md-4 control-label">实训结束时间：</label>
+                        <div class="col-lg-6">
+                            <input type="date" class="form-control m-b-10"  id="tEndTime" name="TC_EndTime" placeholder="请添加实训结束时间">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtAddShopPerson" class="col-md-4 control-label">最大人数：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="tMaxAmount" name="TC_MaxAmount" placeholder="请添加最大人数">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtAddShopRemark" class="col-md-4 control-label">实训周期：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="tPeriod" name="TC_Period" value="" placeholder="请添加岗位实训周期">
+                        </div>
+                        <label><sub>月</sub></label>
+                    </div>
+
+                    <div class="form-group" id="divTeacher" style="display:none">
+                        <label for="txtAddShopRemark" class="col-md-4 control-label">教员：</label>
+                        <div class="col-lg-6">
+                          <select class="form-control m-b-10" name="Teacher" id="ddlTeacher">
+                              <option value="">==请选择==</option>
+                          </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="divCouncilor" style="display:none">
+                        <label for="txtAddShopRemark" class="col-md-4 control-label">督导：</label>
+                        <div class="col-lg-6">
+                            <select class="form-control m-b-10" name="Councilor" id="ddlCouncilor">
+                                <option value="">==请选择==</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display:none">
+                        <div>
+                            <input type='text' id="tID" name='TC_ID' value="0">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> 返回到列表</button>
+                <button type="button" class="btn btn-primary" id="Save"><i class="fa fa-floppy-o"></i> 提 交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script>
+       
+        //删除班级函数
+        function del(tID, pageIndex) {
+            $.get("/TrainClasses/Del", { tID: tID }, function (res) {               
+                if (res =="true")
+                {
+                    
+                        Serach(pageIndex);
+                }
+                else
+                {
+                    alert(res);
+                }
+
+            },"text");
+
+        };
+        //修改班级函数
+        function updateStation(tID)
+        {
+          
+            $("#divTGrade").show();
+            $("#divTeacher").show();
+            $("#divCouncilor").show();
+            $("#myModalLabel").text("修改实训班级");
+            $("#Modal").modal("show");
+            $("#Modal").attr("tID", tID);
+          
+
+        }
+        //查询数据
+        function Serach(pageIndex) {
+            var tName = $("#tName").val();
+            var teacher = $("#setThacher option:selected").text();
+           
+            $(".table").attr("page", pageIndex);
+            $.get("/TrainClasses/GetTrainClasses", { tName: tName,teacher:teacher,pageIndex: pageIndex }, function (res) {
+                $(".table tbody").empty();
+
+                if (res.rows.length == 0)
+                {
+                    if (pageIndex > 1)
+                        Serach(pageIndex - 1);
+                }
+                else
+                {                                     
+                    for (var t = 0; t < res.rows.length; t++) {
+                       
+                        var add = $("<tr>" +
+                                "<td>" + res.rows[t].TC_Name + "</td>" +
+                                "<td>" + ChangeDateFormat(res.rows[t].TC_BeginTime) + "</td>" +
+                                "<td>" + ChangeDateFormat(res.rows[t].TC_EndTime) + "</td>" +
+                                 "<td>" + res.rows[t].TC_MaxAmount + "</td>" +
+                                "<td>" + res.rows[t].TC_MaleAmount + "</td>" +
+                                "<td>" + res.rows[t].TC_FemaleAmount + "</td>" +
+                                 "<td>" + res.rows[t].TC_Period + "</td>" +
+                                "<td>" + res.rows[t].Teacher + "</td>" +
+                                "<td>" + res.rows[t].Councilor + "</td>" +
+                                "<td><button onclick=updateStation('" + res.rows[t].TC_ID + "') type=\"button\" class=\"btn btn-success\">修改</button><button type=\"button\" onclick=\"del('" + res.rows[t].TC_ID + "','" + pageIndex + "')\" class=\"btn btn-danger\">删除</button></td>" +
+                                "</tr>"
+                                //JSON.stringify(res.rows[t]).replace(/\"/g, "'")
+                        )
+                        $(".table tbody").append(add);
+                    }
+                    $(".pagination").empty();
+                    if (pageIndex == 1)
+                        $(".pagination").append("<li class=\"disabled\" ><a href=\"#\">&laquo;</a></li>");
+                    else
+                        $(".pagination").append("<li onclick=\"Serach(1)\" ><a href=\"#\">&laquo;</a></li>");
+                    if (pageIndex > 3) {
+                        for (var t = pageIndex - 2; t < pageIndex + 3; t++) {
+
+                            if (pageIndex == t)
+                                $(".pagination").append("<li  class=\"active\"><a href=\"#\">" + t + "</a></li>");
+                            else
+                                $(".pagination").append("<li onclick=\"Serach(" + t + ")\"> <a href=\"#\">" + t + "</a></li>");
+                            if (t == res.total) {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        for (var t = 1; t <= res.total; t++) {
+                            if (pageIndex == t)
+                                $(".pagination").append("<li  class=\"active\"><a href=\"#\">" + t + "</a></li>");
+                            else
+                                $(".pagination").append("<li onclick=\"Serach(" + t + ")\" >  <a href=\"#\">" + t + "</a></li>");
+                            if (t == 5) {
+                                break;
+                            }
+                        }
+                    }
+                    if (pageIndex == res.total)
+                        $(".pagination").append("<li class=\"disabled\"><a href=\"#\">&raquo;</a></li>");
+                    else
+                        $(".pagination").append("<li onclick=\"Serach(" + res.total + ")\" ><a href=\"#\">&raquo;</a></li>");
+                }
+            });
+        }
+        //绑定教师下拉框
+        function Teacher(obj,teacherType)
+        {
+            $.ajax({
+                url: "/Teachers/GetTeachers",
+                async: false,
+                data: { tRole: teacherType},
+                dataType: "json",
+                success: function (res) {
+                    obj.empty();
+                    obj.append("<option value=\"\">==请选择==</option>")                
+                    for (var t = 0; t < res.length; t++) {
+                        obj.append("<option value='" + res[t].T_ID + "'>" + res[t].T_Name + "</option> ");
+                    }
+                }
+            })       
+        }
+
+        $().ready(function () {
+            Serach(1);                 
+            Teacher($("#setThacher"), $(":radio[name='sName']:checked").val());
+            $(":radio[name='sName']").change(function () {
+                Teacher($("#setThacher"), $(":radio[name='sName']:checked").val());
+            });
+            $("#searchTrainClasses").click(function () {
+                Serach(1);
+            });
+            $("#Modal").on('shown.bs.modal', function () {
+               
+              
+                if ($("#myModalLabel").text() =="修改实训班级")
+                {
+                    Teacher($("#ddlTeacher"), "1");
+                    Teacher($("#ddlCouncilor"), "2");                  
+                    $.ajax({
+                        url: "/TrainClasses/GetVTrainClasses",
+                        async: false,
+                        data: { tID: $("#Modal").attr("tID") },
+                        dataType:"json",
+                        success:function(res)
+                        {
+                            if (res != null) {
+                                $("#Modal").modal("show");
+                                $("#myModalLabel").text("修改实训班级");
+
+                                $("#addName").val(res.rows.TC_Name);
+                                $("#tGrade").val(res.rows.TC_Grade);
+                                $("#tBeginTime").val(ChangeDateFormat(res.rows.TC_BeginTime));
+                                $("#tEndTime").val(ChangeDateFormat(res.rows.TC_EndTime));
+                                $("#tMaxAmount").val(res.rows.TC_MaxAmount);
+                                $("#tPeriod").val(res.rows.TC_Period);
+                                $("#tID").val(res.rows.TC_ID);
+                                
+                                $("#ddlTeacher").val(res.tID);
+                                $("#ddlCouncilor").val(res.cID);
+                            }
+                            else {
+                                alert("该岗位已不存在");
+                            }
+                        }
+
+                    });               
+                }
+              
+            })
+            $("#Modal").on('hidden.bs.modal', function () {
+                $("#divTGrade").hide();
+                $("#divTeacher").hide();
+                $("#divCouncilor").hide();
+
+                $(".form-horizontal input").val("");
+                //$("#addName").val("");
+                //$("#tGrade").val("");
+                //$("#tBeginTime").val("");
+                //$("#tEndTime").val("");
+                //$("#tMaxAmount").val("");
+                //$("#tMaxAmount").val("");
+                //$("#tPeriod").val("");
+                //$("#tID").val("");
+
+                $("#ddlTeacher").empty();
+                $("#ddlCouncilor").empty();
+
+            })
+            //提交班级新增或修改数据
+            $("#Save").click(function () {
+                if ($("#addName").val() == "") {
+                    alert("班级名称不能为空");
+                    return;
+                }
+                if ($("#tGrade").val() == "") {
+                    alert("年级不能为空");
+                    return;
+                }
+                if ($("#tBeginTime").val() == "") {
+                    alert("实训开始时间不能为空");
+                    return;
+                }
+                if ($("#tEndTime").val() == "") {
+                    alert("实训结束时间不能为空");
+                    return;
+                }
+                if ($("#tMaxAmount").val() == "") {
+                    alert("最大人数不能为空");
+                    return;
+                }
+                if ($("#tPeriod").val() == "") {
+                    alert("实训周期不能为空");
+                    return;
+                }
+                $.ajax({
+                    url: "/TrainClasses/AddOrUpdate",
+                    type: "post",
+                    async: true,
+                    data: $(".form-horizontal").serialize(),
+                    dataType: "text",
+                    success: function (res) {
+                        if(res=="update")
+                        {
+                            $("#Modal").modal("hide");
+                            Serach($(".table").attr("page"));
+                        }
+                        else if(res=="add")
+                        {
+                            $("#Modal").modal("hide");
+                            Serach(1);
+                        }
+                        else
+                        {
+                            alert(res);
+                        }
+
+                    }
+                });
+            });
+            $("#addTrainClasses").click(function () {
+                $("#myModalLabel").text("新增实训班级");
+                $("#tGrade").val("18")
+            });
+        });
+</script>

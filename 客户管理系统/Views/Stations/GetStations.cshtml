@@ -1,0 +1,257 @@
+﻿
+@{
+    Layout = null;
+}
+<style>
+    .la {
+        margin-left: -50px;
+    }
+</style>
+<div class="templatemo-content-wrapper">
+    <div class="templatemo-content">
+        <ol class="breadcrumb">
+            <li><a href="index.html">Admin Panel</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li class="active">Overview</li>
+            <li><a href="sign-in.html">Sign In Form</a></li>
+        </ol>
+        <h1>Dashboard</h1>
+        <div class="margin-bottom-30">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills">
+                        <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+                        <li class="active"><a href="#">Profile <span class="badge">126</span></a></li>
+                        <li class="active"><a href="#">Messages <span class="badge">14</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <form class="form-horizontal" role="form">
+            <div class="form-group col-sm-3">
+                <input type="text" class="form-control" id="sName"
+                       placeholder="请输入添加的岗位名称">
+            </div>           
+            <button type="button" id="searchStations" class="btn btn-default">查询</button>
+            <button type="button" id="addStations" class="btn btn-default" data-toggle="modal" data-target="#Modal" data-backdrop="static">新增</button>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>岗位名称</th>
+                    <th>岗位职责</th>
+                    <th>所需技术</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li class="disabled"><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&raquo;</a></li>
+
+        </ul>
+
+    </div>
+
+</div>
+<div style="margin:15% auto" class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="txtAddShopName" class="col-md-4 control-label">岗位名称：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="stnName" name="Station_Name" placeholder="请添加岗位名称">
+                        </div>
+                    </div>
+                 
+                    <div class="form-group">
+                        <label for="txtAddShopPerson" class="col-md-4 control-label">岗位职责：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="stnDuty" name="Station_Duty" placeholder="请添加岗位职责">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtAddShopRemark" class="col-md-4 control-label">所需技术：</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control m-b-10" id="stnNeedTechnique" name="Station_NeedTechnique" value="" placeholder="请添加岗位所需技术">
+                        </div>
+                    </div>
+                    <div class="form-group" style="display:none">
+
+                        <div>
+                            <input type='text' id="s_ID" name='Station_ID' value="0">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> 关 闭</button>
+                <button type="button" class="btn btn-primary" id="Save"><i class="fa fa-floppy-o"></i> 提 交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script>
+        //删除专业函数
+        function del(sID, pageIndex) {
+            $.getJSON("/Stations/Del", { sID: sID }, function (res) {
+
+                if (res ==true)
+                {
+                        Serach(pageIndex);
+                }
+                else
+                {
+                    alert(res);
+                }
+
+            });
+
+        };
+    //修改专业函数
+        function updateStation(sID)
+        {
+            $.getJSON("/Stations/GetStation", { sID: sID }, function (res) {
+                if (res != null)
+                {
+                    $("#Modal").modal("show");
+                    $("#myModalLabel").text("修改岗位信息");
+                    $("#s_ID").val(res.Station_ID);
+                    $("#stnName").val(res.Station_Name);
+                    $("#stnDuty").val(res.Station_Duty);
+                    $("#stnNeedTechnique").val(res.Station_NeedTechnique);
+                }
+                else
+                {
+                    alert("该岗位已不存在");
+                }
+
+            })
+           
+        }
+        //查询数据
+        function Serach(pageIndex) {          
+            var sName = $("#sName").val();
+            $(".table").attr("page", pageIndex);
+            $.get("/Stations/GetStations", {sName: sName, pageIndex: pageIndex }, function (res) {
+                $(".table tbody").empty();
+
+                if (res.rows.length == 0)
+                {
+                    if (pageIndex > 1)
+                        Serach(pageIndex - 1);
+                }
+                else
+                {
+                    for (var t = 0; t < res.rows.length; t++) {
+                        var add = $("<tr>" +
+                                "<td>" + res.rows[t].Station_Name + "</td>" +
+                                "<td>" + res.rows[t].Station_Duty + "</td>" +
+                                "<td>" + res.rows[t].Station_NeedTechnique + "</td>" +
+                                "<td><button onclick=updateStation('" + res.rows[t].Station_ID + "') type=\"button\" class=\"btn btn-success\">修改</button><button type=\"button\" onclick=\"del('" + res.rows[t].Station_ID + "','" + pageIndex + "')\" class=\"btn btn-danger\">删除</button></td>" +
+                                "</tr>"
+                                //JSON.stringify(res.rows[t]).replace(/\"/g, "'")
+                        )
+                        $(".table tbody").append(add);                       
+                    }
+                    $(".pagination").empty();
+                    if (pageIndex == 1)
+                        $(".pagination").append("<li class=\"disabled\" ><a href=\"#\">&laquo;</a></li>");
+                    else
+                        $(".pagination").append("<li onclick=\"Serach(1)\" ><a href=\"#\">&laquo;</a></li>");
+                    if (pageIndex > 3) {
+                        for (var t = pageIndex - 2; t < pageIndex + 3; t++) {
+
+                            if (pageIndex == t)
+                                $(".pagination").append("<li  class=\"active\"><a href=\"#\">" + t + "</a></li>");
+                            else
+                                $(".pagination").append("<li onclick=\"Serach(" + t + ")\"> <a href=\"#\">" + t + "</a></li>");
+                            if (t == res.total) {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        for (var t = 1; t <= res.total; t++) {
+                            if (pageIndex == t)
+                                $(".pagination").append("<li  class=\"active\"><a href=\"#\">" + t + "</a></li>");
+                            else
+                                $(".pagination").append("<li onclick=\"Serach(" + t + ")\" >  <a href=\"#\">" + t + "</a></li>");
+                            if (t == 5) {
+                                break;
+                            }
+                        }
+                    }
+                    if (pageIndex == res.total)
+                        $(".pagination").append("<li class=\"disabled\"><a href=\"#\">&raquo;</a></li>");
+                    else
+                        $(".pagination").append("<li onclick=\"Serach(" + res.total + ")\" ><a href=\"#\">&raquo;</a></li>");
+                }
+            });
+        }
+
+        $().ready(function () {
+            Serach(1);
+            $("#searchStations").click(function () {
+                Serach(1);
+            });
+            $("#Save").click(function () {
+               
+                if ($("#stnName").val() == "") {
+                    alert("岗位名称不能为空");
+                    return;
+                }
+                if ($("#stnDuty").val() == "") {
+                    alert("岗位职责不能为空");
+                    return;
+                }
+                $.ajax({
+                    url: "/Stations/AddOrUpdate",
+                    type: "post",
+                    async: true,
+                    data: $(".form-horizontal").serialize(),
+                    dataType: "text",
+                    success: function (res) {
+                        if(res=="update")
+                        {
+                            $("#Modal").modal("hide");
+                            Serach($(".table").attr("page"));
+                        }
+                        else if(res=="add")
+                        {
+                            $("#Modal").modal("hide");
+                            Serach(1);
+                        }
+                        else
+                        {
+                            alert(res);
+                        }
+
+                    }
+                });
+            });
+            $("#addStations").click(function () {
+                $("#myModalLabel").text("新增岗位信息");              
+                     
+                $("#s_ID").val("");
+                $("#stnName").val("");
+                $("#stnDuty").val("");
+                $("#stnNeedTechnique").val("");
+            });
+        });
+</script>

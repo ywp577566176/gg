@@ -1,0 +1,326 @@
+﻿
+@{
+    Layout = null;
+}
+<style>
+    .la {
+        margin-left: -50px;
+    }
+</style>
+
+<div id="setClass">
+    <div class="templatemo-content-wrapper">
+        <div class="templatemo-content">
+            <ol class="breadcrumb">
+                <li><a href="index.html">Admin Panel</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li class="active">Overview</li>
+                <li><a href="sign-in.html">Sign In Form</a></li>
+            </ol>
+            <h1>Dashboard</h1>
+            <div class="margin-bottom-30">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-pills">
+                            <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+                            <li class="active"><a href="#">Profile <span class="badge">126</span></a></li>
+                            <li class="active"><a href="#">Messages <span class="badge">14</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <form class="form-horizontal" role="form">
+                <label>选择省份：</label>
+                <select v-on:change="getSchools()" v-model="pID">
+                    <option value="0">==请选择==</option>
+                    <option v-for="Pro in ProvincesList"  :value="Pro.P_ID">{{Pro.P_Name}}</option>
+                </select>
+                <label>选择校区：</label>
+                <select  v-on:change="getSchoolClasses"  v-model="sID">
+                    <option value="0">==请选择==</option>
+                    <option v-for="School in SchoolsList" :value="School.School_ID">{{School.School_Name}}</option>
+                </select>
+                <label>选择班级：</label>
+                <select  v-model="classID">
+                    <option value="0">==请选择==</option>
+                    <option v-for="Class in SchoolClassesList" :value="Class.SC_ID">{{Class.SC_Name}}</option>
+                </select>
+                <input type="radio" name="type" v-model="type" value="0" v-on:click="getViewTrainClassStudents(0)"  />未分班
+                <input type="radio" name="type" v-model="type" value="1" v-on:click="getViewTrainClassStudents(1)"/>已分班
+                <input type="radio" name="type" v-model="type" value="2"  v-on:click="getViewTrainClassStudents(2)" />全部
+                <button type="button" v-on:click="CleraData" class="btn btn-default">重置</button>
+                <button type="button" v-on:click="getViewTrainClassStudents(-1)" class="btn btn-default">查询</button>
+                <button type="button" v-on:click="modalShow('-1')" class="btn btn-default">给选定学生分班</button>
+            </form>
+          
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><input id="chkCheck" type="checkbox" v-on:click="allCheckBox" v-model="allcheck" /></th>
+                        <th>学生姓名</th>
+                        <th>所选岗位</th>
+                        <th>分配实训班级名称</th>
+                        <th>性别</th>
+                        <th>所属省份</th>
+                        <th>所属校区</th>
+                        <th>校区班级名称</th>
+                        <th>操作</th>                    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="stu in ViewTrainClassStudentsList">
+                        <td><input  :value="stu.Student_ID" v-model="check" type="checkbox" /></td>
+                        <td>{{stu.Student_Name}}</td>
+                        <td>{{stu.Station_Name}}</td>
+                        <td ><input type="checkbox" v-model="biaoshi" :value="stu.Student_ID" style="display:none"  />{{stu.TC_Name==null?"未分配":stu.TC_Name}}</td>                  
+                        <td>{{stu.Student_Sex}}</td>
+                        <td>{{stu.P_Name}}</td>
+                        <td>{{stu.School_Name}}</td>
+                        <td>{{stu.SC_Name}}</td>
+                        <td><button v-on:click="modalShow(stu.Student_ID,stu.TC_Name)" type="button">换班</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul class="pagination">         
+                <li :class="{'disabled':pageIndex==1}"  v-on:click="pageClick(1)" ><a href="#">&laquo;</a></li>           
+                <li v-for="page in pageCount" name="page" v-on:click="pageClick(page)" :class="{'active':pageIndex==page}"><a href="#">{{page}}</a></li>              
+                <li :class="{'disabled':pageIndex==pageAll} " v-on:click="pageClick(pageAll)"><a href="#" >&raquo;</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+    <div style="margin:15% auto" class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                       <label>实训班级</label>
+                      <select v-model="partTCID">
+                          <option value="0">==请选择==</option>                        
+                          <option v-for="cls in TranClass" :value="cls.TC_ID">{{cls.TC_Name}}</option>
+                      </select>
+                   
+
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal"> 关闭</button>
+                <button type="button" v-on:click="addOrUpdateClass" class="btn btn-primary">提交更改 </button>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+
+<div id="abc">
+
+</div>
+<script>
+    function alt(t) {
+        alert(t);
+    };
+    var a = document.createElement("script");
+    a.setAttribute("src", "http://localhost:3216/Scripts/web.js");
+    var b = document.getElementById("abc");
+    b.appendChild(a);
+    new Vue({
+        el: "#setClass",
+        data:{          
+                ViewTrainClassStudentsList: [],
+                ProvincesList: [],
+                SchoolsList: [],
+                SchoolClassesList: [],
+                check: [],
+                biaoshi:[],
+                TranClass:[],
+                pID: 0,
+                sID: 0,
+                classID: 0,
+                type: 2,
+                partTCID:0,
+                allcheck: false,
+                isUpdateClass: false,
+                pageCount:[],
+                pageIndex: 1,
+                pageAll:0
+                
+        },
+        mounted() {
+            this.getProvinces();
+            this.getSchoolClasses();
+            this.getSchools();
+            this.getViewTrainClassStudents(-1);
+             
+        },
+        methods: {
+            //显示模态窗口
+            modalShow: function(id, name) {              
+                if (id == -1)
+                {
+                    myData.isUpdateClass = false;
+                    $("#myModalLabel").text("给选中学生分班");
+                    if (myData.check.length == 0)
+                    {
+                        alert("请先选择需要分班的人")
+                        return;
+                    }                                       
+                }                  
+                else
+                {
+                    if (name == null)
+                    {
+                        alert("换班请选择换班已分班的人");
+                        return;
+                    }
+                    myData.isUpdateClass = true;
+                    myData.check.push(id);
+                    $("#myModalLabel").text("学生换班");
+                }
+                   
+                $("#Modal").modal("show");
+                axios.post("/TrainClasses/GetTrainClassesDDL").then(m=> {
+                    myData.TranClass = m.data;
+                }).catch(Error=>alert(Error));
+               
+            },
+            //提交换班和分班数据
+            addOrUpdateClass: function () {
+                if (myData.partTCID == 0)
+                {
+                    alert("请选择班级");
+                    return;
+                }
+                alert(myData.check.length);
+                alert(JSON.stringify(myData.check))
+                axios.post("/TrainClassStudents/addOrUpdateClass", { check: myData.check, tID: myData.partTCID, isUpdateClass: myData.isUpdateClass })
+                    .then(m=> {
+                        myData.getViewTrainClassStudents(-1);
+                        alert(m.data);
+                        $("#Modal").modal("hide");
+                    }).catch(Error=>alert(Error))
+            },
+
+            //全选/全不选
+            allCheckBox: function () {
+                 
+                if (myData.biaoshi.length != 0) {
+                    alert("只有当前页均未分班上才能选择全选/反选");
+                    $("#chkCheck").prop("checked", false);                
+                    return;
+                }             
+                if (myData.allcheck) {                   
+                    myData.check = [];
+                }
+                else {
+                  
+                    for (var t = 0; t < myData.ViewTrainClassStudentsList.length; t++)
+                    {
+                        myData.check.push(myData.ViewTrainClassStudentsList[t].Student_ID);
+                    }
+                   
+                };
+               
+            },
+            //重置下拉框
+            CleraData:function(){
+                myData.pID = 0;
+                myData.sID = 0;
+                myData.classID = 0;
+                myData.type = 2;
+            },
+            //绑定省份下拉框
+            getProvinces: function(){            
+                myData = this;            
+                axios.post("/Provinces/GetProvinces").then(
+                 m=> {
+                        myData.ProvincesList = m.data;
+                        
+                    })
+                .catch(Error=>alert(Error));
+            },
+            //绑定学校下拉框
+            getSchools: function () {
+                myData.sID = 0;
+                myData.classID = 0;
+                axios.post("/Schools/GetView_SchoolS", { pID: myData.pID }).then(function (m) {
+                    myData.SchoolsList = m.data;
+                })
+                .catch(Error=>alert(Error));            
+            },
+            //绑定专业下拉框
+            getSchoolClasses: function () {
+                myData.classID = 0;
+                axios.post("/SchoolClasses/GetSchoolClasses", { sID: myData.sID }).then(m=>{
+                    myData.SchoolClassesList = m.data;
+                })
+               .catch(Error=>alert(Error));
+            },
+            //获取学生数据
+            getViewTrainClassStudents: function (type) {             
+                if (type == -1)
+                {
+                    type = myData.type;
+                }                
+                axios.post("/TrainClassStudents/GetViewStudents", { pID: myData.pID, sID: myData.sID, classID: myData.classID, type: type, pageIndex: myData.pageIndex }).then(m=> {
+                    myData.ViewTrainClassStudentsList = m.data.rows;
+                    myData.pageAll = m.data.pageCount;                   
+                    $("ul li[name='page']").remove();
+                   // 分页
+                    if (m.data.pageCount <= 9) {
+                        for (var t = 0; t < m.data.pageCount; t++) {
+                            myData.pageCount.push(t + 1);
+                        }
+                    }
+                    else {
+                        if (myData.pageIndex >= 5 && myData.pageIndex <= (myData.pageAll - 5)) {
+                            for (var t = 0; t < 9; t++) {
+                                var num = myData.pageIndex + t - 4
+                                myData.pageCount.push(num);
+                            }
+                        }
+                        else if(myData.pageIndex>=(myData.pageAll-5))
+                        {
+                            for (var t = 0; t < 9; t++) {
+                                var num = myData.pageAll - 8 + t;
+                                myData.pageCount.push(num);
+                            }
+                           
+                        }
+                        else {
+                            for (var t = 0; t < 9; t++) {
+                                myData.pageCount.push(t + 1);
+                            }
+                        }
+
+                    };                            
+                    myData.allcheck = false;
+                    myData.biaoshi = [];
+                    myData.check = [];
+                    //判断哪些人分了班的
+                    for (var t = 0; t < m.data.rows.length; t++)
+                    {
+                        if (m.data.rows[t].TC_Name != null)
+                            myData.biaoshi.push(m.data.rows[t].Student_ID);
+                    }
+                   
+                  
+                }).catch(Error=>alert(Error));
+              
+            },
+            //分页点击事件
+            pageClick: function (page) {
+                myData.pageIndex = page;
+                myData.getViewTrainClassStudents(-1);
+            }
+            
+        }
+    });
+
+   
+
+
+</script>
+@*<script type="text/javascript" src="http://localhost:3216/Scripts/web.js"></script>*@

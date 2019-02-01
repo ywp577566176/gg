@@ -1,0 +1,1648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CRMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Floors">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="H_ID" Type="int" />
+          <Property Name="F_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="F_Remark" Type="varchar" MaxLength="200" />
+          <Property Name="F_MaleOrFemale" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Houses">
+          <Key>
+            <PropertyRef Name="H_ID" />
+          </Key>
+          <Property Name="H_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="H_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="H_Remark" Type="varchar" MaxLength="100" />
+          <Property Name="H_MaleOrFemale" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="OperationLogs">
+          <Key>
+            <PropertyRef Name="PL_ID" />
+          </Key>
+          <Property Name="PL_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="T_ID" Type="int" />
+          <Property Name="PL_TableName" Type="varchar" MaxLength="20" />
+          <Property Name="PL_Operation" Type="varchar" MaxLength="20" />
+          <Property Name="PL_Description" Type="varchar" MaxLength="100" />
+          <Property Name="PL_Time" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Provinces">
+          <Key>
+            <PropertyRef Name="P_ID" />
+          </Key>
+          <Property Name="P_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="P_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="P_Remark" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="RoomCategories">
+          <Key>
+            <PropertyRef Name="RC_ID" />
+          </Key>
+          <Property Name="RC_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RC_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RC_Count" Type="tinyint" />
+          <Property Name="RC_MoneyPerMonth" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="Rooms">
+          <Key>
+            <PropertyRef Name="R_ID" />
+          </Key>
+          <Property Name="R_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="F_ID" Type="int" />
+          <Property Name="RC_ID" Type="int" />
+          <Property Name="R_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="R_MaleOrFemale" Type="tinyint" />
+          <Property Name="R_IsHasFull" Type="bit" />
+        </EntityType>
+        <EntityType Name="SchoolClasses">
+          <Key>
+            <PropertyRef Name="SC_ID" />
+          </Key>
+          <Property Name="SC_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="School_ID" Type="int" />
+          <Property Name="Specialty_ID" Type="int" />
+          <Property Name="SC_Name" Type="varchar" MaxLength="50" />
+          <Property Name="SC_FemaleAmount" Type="int" />
+          <Property Name="SC_MaleAmount" Type="int" />
+          <Property Name="SC_Teacher" Type="varchar" MaxLength="20" />
+          <Property Name="SC_Supervisor" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Schools">
+          <Key>
+            <PropertyRef Name="School_ID" />
+          </Key>
+          <Property Name="School_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="P_ID" Type="int" />
+          <Property Name="School_Code" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="School_Name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="School_Remark" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SelectStationPeriods">
+          <Key>
+            <PropertyRef Name="SSP_ID" />
+          </Key>
+          <Property Name="SSP_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="School_ID" Type="int" />
+          <Property Name="Specialty_ID" Type="int" />
+          <Property Name="SSP_PreachDate" Type="date" Nullable="false" />
+          <Property Name="SSP_OverDay" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Specialties">
+          <Key>
+            <PropertyRef Name="Specialty_ID" />
+          </Key>
+          <Property Name="Specialty_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Specialty_Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Specialty_Description" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“CRM.dbo.SpecialtyStations”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="SpecialtyStations">
+          <Key>
+            <PropertyRef Name="SS_ID" />
+          </Key>
+          <Property Name="Specialty_ID" Type="int" />
+          <Property Name="Station_ID" Type="int" />
+          <Property Name="School_ID" Type="int" />
+          <Property Name="SS_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stations">
+          <Key>
+            <PropertyRef Name="Station_ID" />
+          </Key>
+          <Property Name="Station_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Station_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Station_Duty" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Station_NeedTechnique" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Students">
+          <Key>
+            <PropertyRef Name="Student_ID" />
+          </Key>
+          <Property Name="Student_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SC_ID" Type="int" />
+          <Property Name="Student_NO" Type="varchar" MaxLength="120" />
+          <Property Name="Student_Name" Type="varchar" MaxLength="110" />
+          <Property Name="Student_NameSpell" Type="varchar" MaxLength="120" />
+          <Property Name="Student_Sex" Type="varchar" MaxLength="15" />
+          <Property Name="Student_IdentityNumber" Type="varchar" MaxLength="150" />
+          <Property Name="Student_State" Type="varchar" MaxLength="120" />
+          <Property Name="Student_Exam" Type="varchar" MaxLength="120" />
+          <Property Name="Student_Education" Type="varchar" MaxLength="150" />
+          <Property Name="Student_Specialty" Type="varchar" MaxLength="150" />
+          <Property Name="Student_Schoolofgraduation" Type="varchar" MaxLength="150" />
+          <Property Name="Student_PersonalTel" Type="varchar" MaxLength="150" />
+          <Property Name="Student_FamilyTel" Type="varchar" MaxLength="150" />
+          <Property Name="Student_QQ" Type="varchar" MaxLength="120" />
+          <Property Name="Student_Address" Type="varchar" MaxLength="180" />
+          <Property Name="Student_PostCode" Type="varchar" MaxLength="110" />
+          <Property Name="Student_EducationMoney" Type="varchar" MaxLength="120" />
+          <Property Name="Student_SkillTrainingMoney" Type="varchar" MaxLength="120" />
+          <Property Name="Student_TrainResideMoney" Type="varchar" MaxLength="120" />
+          <Property Name="Student_Evaluate1" Type="text" />
+          <Property Name="Student_Evaluate2" Type="text" />
+          <Property Name="Student_Remark" Type="varchar" MaxLength="600" />
+          <Property Name="Station_ID" Type="int" />
+          <Property Name="Stationt_SelectStationCount" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Teachers">
+          <Key>
+            <PropertyRef Name="T_ID" />
+          </Key>
+          <Property Name="T_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="T_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="T_Sex" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="T_Tel" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="T_Category" Type="tinyint" Nullable="false" />
+          <Property Name="T_LoginName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="T_Pwd" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="T_Role" Type="tinyint" Nullable="false" />
+          <Property Name="T_IsEnabled" Type="bit" Nullable="false" />
+          <Property Name="T_LastLoginTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TrainClasses">
+          <Key>
+            <PropertyRef Name="TC_ID" />
+          </Key>
+          <Property Name="TC_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TC_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TC_Grade" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TC_BeginTime" Type="datetime" Nullable="false" />
+          <Property Name="TC_EndTime" Type="datetime" Nullable="false" />
+          <Property Name="TC_MaxAmount" Type="tinyint" Nullable="false" />
+          <Property Name="TC_MaleAmount" Type="tinyint" />
+          <Property Name="TC_FemaleAmount" Type="tinyint" />
+          <Property Name="TC_Period" Type="tinyint" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“CRM.dbo.TrainClassRooms”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="TrainClassRooms">
+          <Key>
+            <PropertyRef Name="TC_RealPersonAmount" />
+          </Key>
+          <Property Name="TC_ID" Type="int" />
+          <Property Name="R_ID" Type="int" />
+          <Property Name="TC_RealPersonAmount" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TrainClassStudents">
+          <Key>
+            <PropertyRef Name="Student_ID" />
+          </Key>
+          <Property Name="Student_ID" Type="int" Nullable="false" />
+          <Property Name="TC_ID" Type="int" />
+          <Property Name="R_ID" Type="int" />
+          <Property Name="Student_IsHasAllotRoom" Type="bit" />
+        </EntityType>
+        <EntityType Name="TrainClassTeachers">
+          <Key>
+            <PropertyRef Name="Tran_ID" />
+          </Key>
+          <Property Name="TC_ID" Type="int" />
+          <Property Name="T_ID" Type="int" />
+          <Property Name="Tran_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“CRM.dbo.View_ChooseJobs”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="View_ChooseJobs">
+          <Key>
+            <PropertyRef Name="School_ID" />
+            <PropertyRef Name="School_Code" />
+            <PropertyRef Name="School_Name" />
+          </Key>
+          <Property Name="School_ID" Type="int" Nullable="false" />
+          <Property Name="P_ID" Type="int" />
+          <Property Name="School_Code" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="School_Name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="School_Remark" Type="varchar" MaxLength="100" />
+          <Property Name="P_Name" Type="varchar" MaxLength="20" />
+          <Property Name="SSP_PreachDate" Type="date" />
+          <Property Name="SSP_OverDay" Type="tinyint" />
+          <Property Name="Specialty_Name" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“CRM.dbo.View_SchoolS”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="View_SchoolS">
+          <Key>
+            <PropertyRef Name="School_ID" />
+            
+            
+          </Key>
+          <Property Name="School_ID" Type="int" Nullable="false" />
+          <Property Name="School_Code" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="School_Name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="School_Remark" Type="varchar" MaxLength="100" />
+          <Property Name="P_ID" Type="int" />
+          <Property Name="P_Name" Type="varchar" MaxLength="20" />
+          <Property Name="P_Remark" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“CRM.dbo.View_Stations”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="View_Stations">
+          <Key>
+            <PropertyRef Name="Station_ID" />
+            <PropertyRef Name="Station_Name" />
+            <PropertyRef Name="Station_Duty" />
+            <PropertyRef Name="Station_NeedTechnique" />
+          </Key>
+          <Property Name="Station_ID" Type="int" Nullable="false" />
+          <Property Name="Station_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Station_Duty" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Station_NeedTechnique" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Specialty_ID" Type="int" />
+          <Property Name="School_ID" Type="int" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“CRM.dbo.View_Students”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="View_Students">
+          <Key>
+            <PropertyRef Name="Student_ID" />
+          </Key>
+          <Property Name="Student_ID" Type="int" Nullable="false" />
+          <Property Name="Student_Name" Type="varchar" MaxLength="110" />
+          <Property Name="Student_Sex" Type="varchar" MaxLength="15" />
+          <Property Name="Student_Specialty" Type="varchar" MaxLength="150" />
+          <Property Name="Student_Schoolofgraduation" Type="varchar" MaxLength="150" />
+          <Property Name="Student_PersonalTel" Type="varchar" MaxLength="150" />
+          <Property Name="TC_ID" Type="int" />
+          <Property Name="Station_ID" Type="int" />
+          <Property Name="Station_Name" Type="varchar" MaxLength="20" />
+          <Property Name="TC_Name" Type="varchar" MaxLength="20" />
+          <Property Name="SC_ID" Type="int" />
+          <Property Name="Specialty_ID" Type="int" />
+          <Property Name="SC_Name" Type="varchar" MaxLength="50" />
+          <Property Name="School_Name" Type="varchar" MaxLength="30" />
+          <Property Name="P_Name" Type="varchar" MaxLength="20" />
+          <Property Name="P_ID" Type="int" />
+          <Property Name="School_ID" Type="int" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“CRM.dbo.View_TrainClasses”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="View_TrainClasses">
+          <Key>
+            <PropertyRef Name="TC_ID" />
+            <PropertyRef Name="TC_Name" />
+            <PropertyRef Name="TC_Grade" />
+            <PropertyRef Name="TC_BeginTime" />
+            <PropertyRef Name="TC_EndTime" />
+            <PropertyRef Name="TC_MaxAmount" />
+          </Key>
+          <Property Name="Teacher" Type="varchar" MaxLength="20" />
+          <Property Name="Councilor" Type="varchar" MaxLength="20" />
+          <Property Name="TC_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TC_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TC_Grade" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TC_BeginTime" Type="datetime" Nullable="false" />
+          <Property Name="TC_EndTime" Type="datetime" Nullable="false" />
+          <Property Name="TC_MaxAmount" Type="tinyint" Nullable="false" />
+          <Property Name="TC_MaleAmount" Type="tinyint" />
+          <Property Name="TC_FemaleAmount" Type="tinyint" />
+          <Property Name="TC_Period" Type="tinyint" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“CRM.dbo.View_TrainTeachers”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="View_TrainTeachers">
+          
+          <Key>
+            <PropertyRef Name="num" />
+          </Key>
+          <Property Name="T_Name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TC_ID" Type="int" />
+          <Property Name="T_ID" Type="int" />
+          <Property Name="Tran_ID" Type="int" />
+          <Property Name="T_Role" Type="tinyint" Nullable="false" />
+          <Property Name="num" Type="bigint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_FLOORS_REFERENCE_HOUSES">
+          <End Role="Houses" Type="Self.Houses" Multiplicity="0..1" />
+          <End Role="Floors" Type="Self.Floors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Houses">
+              <PropertyRef Name="H_ID" />
+            </Principal>
+            <Dependent Role="Floors">
+              <PropertyRef Name="H_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OPERATIO_REFERENCE_TEACHERS">
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="0..1" />
+          <End Role="OperationLogs" Type="Self.OperationLogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="T_ID" />
+            </Principal>
+            <Dependent Role="OperationLogs">
+              <PropertyRef Name="T_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ROOMS_REFERENCE_FLOORS">
+          <End Role="Floors" Type="Self.Floors" Multiplicity="0..1" />
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Floors">
+              <PropertyRef Name="F_ID" />
+            </Principal>
+            <Dependent Role="Rooms">
+              <PropertyRef Name="F_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ROOMS_REFERENCE_ROOMCATE">
+          <End Role="RoomCategories" Type="Self.RoomCategories" Multiplicity="0..1" />
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RoomCategories">
+              <PropertyRef Name="RC_ID" />
+            </Principal>
+            <Dependent Role="Rooms">
+              <PropertyRef Name="RC_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCHOOLCL_REFERENCE_SCHOOLS">
+          <End Role="Schools" Type="Self.Schools" Multiplicity="0..1" />
+          <End Role="SchoolClasses" Type="Self.SchoolClasses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schools">
+              <PropertyRef Name="School_ID" />
+            </Principal>
+            <Dependent Role="SchoolClasses">
+              <PropertyRef Name="School_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCHOOLCL_REFERENCE_SPECIALT">
+          <End Role="Specialties" Type="Self.Specialties" Multiplicity="0..1" />
+          <End Role="SchoolClasses" Type="Self.SchoolClasses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialties">
+              <PropertyRef Name="Specialty_ID" />
+            </Principal>
+            <Dependent Role="SchoolClasses">
+              <PropertyRef Name="Specialty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCHOOLS_REFERENCE_PROVINCE">
+          <End Role="Provinces" Type="Self.Provinces" Multiplicity="0..1" />
+          <End Role="Schools" Type="Self.Schools" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provinces">
+              <PropertyRef Name="P_ID" />
+            </Principal>
+            <Dependent Role="Schools">
+              <PropertyRef Name="P_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SELECTST_REFERENCE_SCHOOLS">
+          <End Role="Schools" Type="Self.Schools" Multiplicity="0..1" />
+          <End Role="SelectStationPeriods" Type="Self.SelectStationPeriods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schools">
+              <PropertyRef Name="School_ID" />
+            </Principal>
+            <Dependent Role="SelectStationPeriods">
+              <PropertyRef Name="School_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SELECTST_REFERENCE_SPECIALT">
+          <End Role="Specialties" Type="Self.Specialties" Multiplicity="0..1" />
+          <End Role="SelectStationPeriods" Type="Self.SelectStationPeriods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialties">
+              <PropertyRef Name="Specialty_ID" />
+            </Principal>
+            <Dependent Role="SelectStationPeriods">
+              <PropertyRef Name="Specialty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STUDENTS_REFERENCE_SCHOOLCL">
+          <End Role="SchoolClasses" Type="Self.SchoolClasses" Multiplicity="0..1" />
+          <End Role="Students" Type="Self.Students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SchoolClasses">
+              <PropertyRef Name="SC_ID" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="SC_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STUDENTS_REFERENCE_STATIONS">
+          <End Role="Stations" Type="Self.Stations" Multiplicity="0..1" />
+          <End Role="Students" Type="Self.Students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stations">
+              <PropertyRef Name="Station_ID" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="Station_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLA_REFERENCE_Room">
+          <End Role="TrainClasses" Type="Self.TrainClasses" Multiplicity="0..1" />
+          <End Role="TrainClassRooms" Type="Self.TrainClassRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainClasses">
+              <PropertyRef Name="TC_ID" />
+            </Principal>
+            <Dependent Role="TrainClassRooms">
+              <PropertyRef Name="TC_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLA_REFERENCE_Student">
+          <End Role="TrainClasses" Type="Self.TrainClasses" Multiplicity="0..1" />
+          <End Role="TrainClassStudents" Type="Self.TrainClassStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainClasses">
+              <PropertyRef Name="TC_ID" />
+            </Principal>
+            <Dependent Role="TrainClassStudents">
+              <PropertyRef Name="TC_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLA_REFERENCE_STUDENTS">
+          <End Role="Students" Type="Self.Students" Multiplicity="1" />
+          <End Role="TrainClassStudents" Type="Self.TrainClassStudents" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="Student_ID" />
+            </Principal>
+            <Dependent Role="TrainClassStudents">
+              <PropertyRef Name="Student_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLAS_REFERENCE_ROOMS">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="0..1" />
+          <End Role="TrainClassRooms" Type="Self.TrainClassRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="R_ID" />
+            </Principal>
+            <Dependent Role="TrainClassRooms">
+              <PropertyRef Name="R_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLASS_REFERENCE_ROOMS">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="0..1" />
+          <End Role="TrainClassStudents" Type="Self.TrainClassStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="R_ID" />
+            </Principal>
+            <Dependent Role="TrainClassStudents">
+              <PropertyRef Name="R_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CRMModelStoreContainer">
+          <EntitySet Name="Floors" EntityType="Self.Floors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Houses" EntityType="Self.Houses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OperationLogs" EntityType="Self.OperationLogs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Provinces" EntityType="Self.Provinces" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoomCategories" EntityType="Self.RoomCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SchoolClasses" EntityType="Self.SchoolClasses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Schools" EntityType="Self.Schools" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SelectStationPeriods" EntityType="Self.SelectStationPeriods" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Specialties" EntityType="Self.Specialties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stations" EntityType="Self.Stations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teachers" EntityType="Self.Teachers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrainClasses" EntityType="Self.TrainClasses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrainClassStudents" EntityType="Self.TrainClassStudents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrainClassTeachers" EntityType="Self.TrainClassTeachers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpecialtyStations" EntityType="Self.SpecialtyStations" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SpecialtyStations].[Specialty_ID] AS [Specialty_ID], 
+    [SpecialtyStations].[Station_ID] AS [Station_ID], 
+    [SpecialtyStations].[School_ID] AS [School_ID], 
+    [SpecialtyStations].[SS_ID] AS [SS_ID]
+    FROM [dbo].[SpecialtyStations] AS [SpecialtyStations]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TrainClassRooms" EntityType="Self.TrainClassRooms" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TrainClassRooms].[TC_ID] AS [TC_ID], 
+    [TrainClassRooms].[R_ID] AS [R_ID], 
+    [TrainClassRooms].[TC_RealPersonAmount] AS [TC_RealPersonAmount]
+    FROM [dbo].[TrainClassRooms] AS [TrainClassRooms]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_ChooseJobs" EntityType="Self.View_ChooseJobs" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_ChooseJobs].[School_ID] AS [School_ID], 
+    [View_ChooseJobs].[P_ID] AS [P_ID], 
+    [View_ChooseJobs].[School_Code] AS [School_Code], 
+    [View_ChooseJobs].[School_Name] AS [School_Name], 
+    [View_ChooseJobs].[School_Remark] AS [School_Remark], 
+    [View_ChooseJobs].[P_Name] AS [P_Name], 
+    [View_ChooseJobs].[SSP_PreachDate] AS [SSP_PreachDate], 
+    [View_ChooseJobs].[SSP_OverDay] AS [SSP_OverDay], 
+    [View_ChooseJobs].[Specialty_Name] AS [Specialty_Name]
+    FROM [dbo].[View_ChooseJobs] AS [View_ChooseJobs]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_SchoolS" EntityType="Self.View_SchoolS" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_SchoolS].[School_ID] AS [School_ID], 
+    [View_SchoolS].[School_Code] AS [School_Code], 
+    [View_SchoolS].[School_Name] AS [School_Name], 
+    [View_SchoolS].[School_Remark] AS [School_Remark], 
+    [View_SchoolS].[P_ID] AS [P_ID], 
+    [View_SchoolS].[P_Name] AS [P_Name], 
+    [View_SchoolS].[P_Remark] AS [P_Remark]
+    FROM [dbo].[View_SchoolS] AS [View_SchoolS]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_Stations" EntityType="Self.View_Stations" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_Stations].[Station_ID] AS [Station_ID], 
+    [View_Stations].[Station_Name] AS [Station_Name], 
+    [View_Stations].[Station_Duty] AS [Station_Duty], 
+    [View_Stations].[Station_NeedTechnique] AS [Station_NeedTechnique], 
+    [View_Stations].[Specialty_ID] AS [Specialty_ID], 
+    [View_Stations].[School_ID] AS [School_ID]
+    FROM [dbo].[View_Stations] AS [View_Stations]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_Students" EntityType="Self.View_Students" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_Students].[Student_ID] AS [Student_ID], 
+    [View_Students].[Student_Name] AS [Student_Name], 
+    [View_Students].[Student_Sex] AS [Student_Sex], 
+    [View_Students].[Student_Specialty] AS [Student_Specialty], 
+    [View_Students].[Student_Schoolofgraduation] AS [Student_Schoolofgraduation], 
+    [View_Students].[Student_PersonalTel] AS [Student_PersonalTel], 
+    [View_Students].[TC_ID] AS [TC_ID], 
+    [View_Students].[Station_ID] AS [Station_ID], 
+    [View_Students].[Station_Name] AS [Station_Name], 
+    [View_Students].[TC_Name] AS [TC_Name], 
+    [View_Students].[SC_ID] AS [SC_ID], 
+    [View_Students].[Specialty_ID] AS [Specialty_ID], 
+    [View_Students].[SC_Name] AS [SC_Name], 
+    [View_Students].[School_Name] AS [School_Name], 
+    [View_Students].[P_Name] AS [P_Name], 
+    [View_Students].[P_ID] AS [P_ID], 
+    [View_Students].[School_ID] AS [School_ID]
+    FROM [dbo].[View_Students] AS [View_Students]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_TrainClasses" EntityType="Self.View_TrainClasses" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_TrainClasses].[Teacher] AS [Teacher], 
+    [View_TrainClasses].[Councilor] AS [Councilor], 
+    [View_TrainClasses].[TC_ID] AS [TC_ID], 
+    [View_TrainClasses].[TC_Name] AS [TC_Name], 
+    [View_TrainClasses].[TC_Grade] AS [TC_Grade], 
+    [View_TrainClasses].[TC_BeginTime] AS [TC_BeginTime], 
+    [View_TrainClasses].[TC_EndTime] AS [TC_EndTime], 
+    [View_TrainClasses].[TC_MaxAmount] AS [TC_MaxAmount], 
+    [View_TrainClasses].[TC_MaleAmount] AS [TC_MaleAmount], 
+    [View_TrainClasses].[TC_FemaleAmount] AS [TC_FemaleAmount], 
+    [View_TrainClasses].[TC_Period] AS [TC_Period]
+    FROM [dbo].[View_TrainClasses] AS [View_TrainClasses]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_TrainTeachers" EntityType="Self.View_TrainTeachers" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_TrainTeachers].[T_Name] AS [T_Name], 
+    [View_TrainTeachers].[TC_ID] AS [TC_ID], 
+    [View_TrainTeachers].[T_ID] AS [T_ID], 
+    [View_TrainTeachers].[Tran_ID] AS [Tran_ID], 
+    [View_TrainTeachers].[T_Role] AS [T_Role], 
+    [View_TrainTeachers].[num] AS [num]
+    FROM [dbo].[View_TrainTeachers] AS [View_TrainTeachers]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_FLOORS_REFERENCE_HOUSES" Association="Self.FK_FLOORS_REFERENCE_HOUSES">
+            <End Role="Houses" EntitySet="Houses" />
+            <End Role="Floors" EntitySet="Floors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OPERATIO_REFERENCE_TEACHERS" Association="Self.FK_OPERATIO_REFERENCE_TEACHERS">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="OperationLogs" EntitySet="OperationLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ROOMS_REFERENCE_FLOORS" Association="Self.FK_ROOMS_REFERENCE_FLOORS">
+            <End Role="Floors" EntitySet="Floors" />
+            <End Role="Rooms" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ROOMS_REFERENCE_ROOMCATE" Association="Self.FK_ROOMS_REFERENCE_ROOMCATE">
+            <End Role="RoomCategories" EntitySet="RoomCategories" />
+            <End Role="Rooms" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCHOOLCL_REFERENCE_SCHOOLS" Association="Self.FK_SCHOOLCL_REFERENCE_SCHOOLS">
+            <End Role="Schools" EntitySet="Schools" />
+            <End Role="SchoolClasses" EntitySet="SchoolClasses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCHOOLCL_REFERENCE_SPECIALT" Association="Self.FK_SCHOOLCL_REFERENCE_SPECIALT">
+            <End Role="Specialties" EntitySet="Specialties" />
+            <End Role="SchoolClasses" EntitySet="SchoolClasses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCHOOLS_REFERENCE_PROVINCE" Association="Self.FK_SCHOOLS_REFERENCE_PROVINCE">
+            <End Role="Provinces" EntitySet="Provinces" />
+            <End Role="Schools" EntitySet="Schools" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SELECTST_REFERENCE_SCHOOLS" Association="Self.FK_SELECTST_REFERENCE_SCHOOLS">
+            <End Role="Schools" EntitySet="Schools" />
+            <End Role="SelectStationPeriods" EntitySet="SelectStationPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SELECTST_REFERENCE_SPECIALT" Association="Self.FK_SELECTST_REFERENCE_SPECIALT">
+            <End Role="Specialties" EntitySet="Specialties" />
+            <End Role="SelectStationPeriods" EntitySet="SelectStationPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STUDENTS_REFERENCE_SCHOOLCL" Association="Self.FK_STUDENTS_REFERENCE_SCHOOLCL">
+            <End Role="SchoolClasses" EntitySet="SchoolClasses" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STUDENTS_REFERENCE_STATIONS" Association="Self.FK_STUDENTS_REFERENCE_STATIONS">
+            <End Role="Stations" EntitySet="Stations" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLA_REFERENCE_Room" Association="Self.FK_TRAINCLA_REFERENCE_Room">
+            <End Role="TrainClasses" EntitySet="TrainClasses" />
+            <End Role="TrainClassRooms" EntitySet="TrainClassRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLA_REFERENCE_Student" Association="Self.FK_TRAINCLA_REFERENCE_Student">
+            <End Role="TrainClasses" EntitySet="TrainClasses" />
+            <End Role="TrainClassStudents" EntitySet="TrainClassStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLA_REFERENCE_STUDENTS" Association="Self.FK_TRAINCLA_REFERENCE_STUDENTS">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="TrainClassStudents" EntitySet="TrainClassStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLAS_REFERENCE_ROOMS" Association="Self.FK_TRAINCLAS_REFERENCE_ROOMS">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="TrainClassRooms" EntitySet="TrainClassRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLASS_REFERENCE_ROOMS" Association="Self.FK_TRAINCLASS_REFERENCE_ROOMS">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="TrainClassStudents" EntitySet="TrainClassStudents" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CRMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Floors">
+          <Key>
+            <PropertyRef Name="F_ID" />
+          </Key>
+          <Property Name="F_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="H_ID" Type="Int32" />
+          <Property Name="F_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="F_Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="F_MaleOrFemale" Type="Byte" />
+          <NavigationProperty Name="Houses" Relationship="Self.FK_FLOORS_REFERENCE_HOUSES" FromRole="Floors" ToRole="Houses" />
+          <NavigationProperty Name="Rooms" Relationship="Self.FK_ROOMS_REFERENCE_FLOORS" FromRole="Floors" ToRole="Rooms" />
+        </EntityType>
+        <EntityType Name="Houses">
+          <Key>
+            <PropertyRef Name="H_ID" />
+          </Key>
+          <Property Name="H_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="H_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="H_Remark" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="H_MaleOrFemale" Type="Byte" />
+          <NavigationProperty Name="Floors" Relationship="Self.FK_FLOORS_REFERENCE_HOUSES" FromRole="Houses" ToRole="Floors" />
+        </EntityType>
+        <EntityType Name="OperationLogs">
+          <Key>
+            <PropertyRef Name="PL_ID" />
+          </Key>
+          <Property Name="PL_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="T_ID" Type="Int32" />
+          <Property Name="PL_TableName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PL_Operation" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PL_Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PL_Time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Teachers" Relationship="Self.FK_OPERATIO_REFERENCE_TEACHERS" FromRole="OperationLogs" ToRole="Teachers" />
+        </EntityType>
+        <EntityType Name="Provinces">
+          <Key>
+            <PropertyRef Name="P_ID" />
+          </Key>
+          <Property Name="P_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="P_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="P_Remark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Schools" Relationship="Self.FK_SCHOOLS_REFERENCE_PROVINCE" FromRole="Provinces" ToRole="Schools" />
+        </EntityType>
+        <EntityType Name="RoomCategories">
+          <Key>
+            <PropertyRef Name="RC_ID" />
+          </Key>
+          <Property Name="RC_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RC_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RC_Count" Type="Byte" />
+          <Property Name="RC_MoneyPerMonth" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="Rooms" Relationship="Self.FK_ROOMS_REFERENCE_ROOMCATE" FromRole="RoomCategories" ToRole="Rooms" />
+        </EntityType>
+        <EntityType Name="Rooms">
+          <Key>
+            <PropertyRef Name="R_ID" />
+          </Key>
+          <Property Name="R_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="F_ID" Type="Int32" />
+          <Property Name="RC_ID" Type="Int32" />
+          <Property Name="R_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="R_MaleOrFemale" Type="Byte" />
+          <Property Name="R_IsHasFull" Type="Boolean" />
+          <NavigationProperty Name="Floors" Relationship="Self.FK_ROOMS_REFERENCE_FLOORS" FromRole="Rooms" ToRole="Floors" />
+          <NavigationProperty Name="RoomCategories" Relationship="Self.FK_ROOMS_REFERENCE_ROOMCATE" FromRole="Rooms" ToRole="RoomCategories" />
+          <NavigationProperty Name="TrainClassRooms" Relationship="Self.FK_TRAINCLAS_REFERENCE_ROOMS" FromRole="Rooms" ToRole="TrainClassRooms" />
+          <NavigationProperty Name="TrainClassStudents" Relationship="CRMModel.FK_TRAINCLASS_REFERENCE_ROOMS" FromRole="Rooms" ToRole="TrainClassStudents" />
+        </EntityType>
+        <EntityType Name="SchoolClasses">
+          <Key>
+            <PropertyRef Name="SC_ID" />
+          </Key>
+          <Property Name="SC_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="School_ID" Type="Int32" />
+          <Property Name="Specialty_ID" Type="Int32" />
+          <Property Name="SC_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SC_FemaleAmount" Type="Int32" />
+          <Property Name="SC_MaleAmount" Type="Int32" />
+          <Property Name="SC_Teacher" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SC_Supervisor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Schools" Relationship="Self.FK_SCHOOLCL_REFERENCE_SCHOOLS" FromRole="SchoolClasses" ToRole="Schools" />
+          <NavigationProperty Name="Specialties" Relationship="Self.FK_SCHOOLCL_REFERENCE_SPECIALT" FromRole="SchoolClasses" ToRole="Specialties" />
+          <NavigationProperty Name="Students" Relationship="Self.FK_STUDENTS_REFERENCE_SCHOOLCL" FromRole="SchoolClasses" ToRole="Students" />
+        </EntityType>
+        <EntityType Name="Schools">
+          <Key>
+            <PropertyRef Name="School_ID" />
+          </Key>
+          <Property Name="School_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="P_ID" Type="Int32" />
+          <Property Name="School_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="School_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="School_Remark" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Provinces" Relationship="Self.FK_SCHOOLS_REFERENCE_PROVINCE" FromRole="Schools" ToRole="Provinces" />
+          <NavigationProperty Name="SchoolClasses" Relationship="Self.FK_SCHOOLCL_REFERENCE_SCHOOLS" FromRole="Schools" ToRole="SchoolClasses" />
+          <NavigationProperty Name="SelectStationPeriods" Relationship="Self.FK_SELECTST_REFERENCE_SCHOOLS" FromRole="Schools" ToRole="SelectStationPeriods" />
+        </EntityType>
+        <EntityType Name="SelectStationPeriods">
+          <Key>
+            <PropertyRef Name="SSP_ID" />
+          </Key>
+          <Property Name="SSP_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="School_ID" Type="Int32" />
+          <Property Name="Specialty_ID" Type="Int32" />
+          <Property Name="SSP_PreachDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SSP_OverDay" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Schools" Relationship="Self.FK_SELECTST_REFERENCE_SCHOOLS" FromRole="SelectStationPeriods" ToRole="Schools" />
+          <NavigationProperty Name="Specialties" Relationship="Self.FK_SELECTST_REFERENCE_SPECIALT" FromRole="SelectStationPeriods" ToRole="Specialties" />
+        </EntityType>
+        <EntityType Name="Specialties">
+          <Key>
+            <PropertyRef Name="Specialty_ID" />
+          </Key>
+          <Property Name="Specialty_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Specialty_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Specialty_Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SchoolClasses" Relationship="Self.FK_SCHOOLCL_REFERENCE_SPECIALT" FromRole="Specialties" ToRole="SchoolClasses" />
+          <NavigationProperty Name="SelectStationPeriods" Relationship="Self.FK_SELECTST_REFERENCE_SPECIALT" FromRole="Specialties" ToRole="SelectStationPeriods" />
+        </EntityType>
+        <EntityType Name="Stations">
+          <Key>
+            <PropertyRef Name="Station_ID" />
+          </Key>
+          <Property Name="Station_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Station_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Station_Duty" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Station_NeedTechnique" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Students" Relationship="Self.FK_STUDENTS_REFERENCE_STATIONS" FromRole="Stations" ToRole="Students" />
+        </EntityType>
+        <EntityType Name="Students">
+          <Key>
+            <PropertyRef Name="Student_ID" />
+          </Key>
+          <Property Name="Student_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SC_ID" Type="Int32" />
+          <Property Name="Student_NO" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Name" Type="String" MaxLength="110" FixedLength="false" Unicode="false" />
+          <Property Name="Student_NameSpell" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Sex" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Student_IdentityNumber" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Student_State" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Exam" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Education" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Specialty" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Schoolofgraduation" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Student_PersonalTel" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Student_FamilyTel" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Student_QQ" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Address" Type="String" MaxLength="180" FixedLength="false" Unicode="false" />
+          <Property Name="Student_PostCode" Type="String" MaxLength="110" FixedLength="false" Unicode="false" />
+          <Property Name="Student_EducationMoney" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Student_SkillTrainingMoney" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Student_TrainResideMoney" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Evaluate1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Evaluate2" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Remark" Type="String" MaxLength="600" FixedLength="false" Unicode="false" />
+          <Property Name="Station_ID" Type="Int32" />
+          <Property Name="Stationt_SelectStationCount" Type="Byte" />
+          <NavigationProperty Name="SchoolClasses" Relationship="Self.FK_STUDENTS_REFERENCE_SCHOOLCL" FromRole="Students" ToRole="SchoolClasses" />
+          <NavigationProperty Name="Stations" Relationship="Self.FK_STUDENTS_REFERENCE_STATIONS" FromRole="Students" ToRole="Stations" />
+          <NavigationProperty Name="TrainClassStudents" Relationship="CRMModel.FK_TRAINCLA_REFERENCE_STUDENTS" FromRole="Students" ToRole="TrainClassStudents" />
+        </EntityType>
+        <EntityType Name="Teachers">
+          <Key>
+            <PropertyRef Name="T_ID" />
+          </Key>
+          <Property Name="T_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="T_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="T_Sex" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="T_Tel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="T_Category" Type="Byte" Nullable="false" />
+          <Property Name="T_LoginName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="T_Pwd" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="T_Role" Type="Byte" Nullable="false" />
+          <Property Name="T_IsEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="T_LastLoginTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OperationLogs" Relationship="Self.FK_OPERATIO_REFERENCE_TEACHERS" FromRole="Teachers" ToRole="OperationLogs" />
+        </EntityType>
+        <EntityType Name="TrainClasses">
+          <Key>
+            <PropertyRef Name="TC_ID" />
+          </Key>
+          <Property Name="TC_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TC_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TC_Grade" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TC_BeginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TC_EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TC_MaxAmount" Type="Byte" Nullable="false" />
+          <Property Name="TC_MaleAmount" Type="Byte" />
+          <Property Name="TC_FemaleAmount" Type="Byte" />
+          <Property Name="TC_Period" Type="Byte" />
+          <NavigationProperty Name="TrainClassRooms" Relationship="Self.FK_TRAINCLA_REFERENCE_Room" FromRole="TrainClasses" ToRole="TrainClassRooms" />
+          <NavigationProperty Name="TrainClassStudents" Relationship="CRMModel.FK_TRAINCLA_REFERENCE_Student" FromRole="TrainClasses" ToRole="TrainClassStudents" />
+        </EntityType>
+        <EntityType Name="TrainClassRooms">
+          <Key>
+            <PropertyRef Name="TC_RealPersonAmount" />
+          </Key>
+          <Property Name="TC_ID" Type="Int32" />
+          <Property Name="R_ID" Type="Int32" />
+          <Property Name="TC_RealPersonAmount" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Rooms" Relationship="Self.FK_TRAINCLAS_REFERENCE_ROOMS" FromRole="TrainClassRooms" ToRole="Rooms" />
+          <NavigationProperty Name="TrainClasses" Relationship="Self.FK_TRAINCLA_REFERENCE_Room" FromRole="TrainClassRooms" ToRole="TrainClasses" />
+        </EntityType>
+        <Association Name="FK_FLOORS_REFERENCE_HOUSES">
+          <End Role="Houses" Type="Self.Houses" Multiplicity="0..1" />
+          <End Role="Floors" Type="Self.Floors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Houses">
+              <PropertyRef Name="H_ID" />
+            </Principal>
+            <Dependent Role="Floors">
+              <PropertyRef Name="H_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ROOMS_REFERENCE_FLOORS">
+          <End Role="Floors" Type="Self.Floors" Multiplicity="0..1" />
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Floors">
+              <PropertyRef Name="F_ID" />
+            </Principal>
+            <Dependent Role="Rooms">
+              <PropertyRef Name="F_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OPERATIO_REFERENCE_TEACHERS">
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="0..1" />
+          <End Role="OperationLogs" Type="Self.OperationLogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="T_ID" />
+            </Principal>
+            <Dependent Role="OperationLogs">
+              <PropertyRef Name="T_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCHOOLS_REFERENCE_PROVINCE">
+          <End Role="Provinces" Type="Self.Provinces" Multiplicity="0..1" />
+          <End Role="Schools" Type="Self.Schools" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provinces">
+              <PropertyRef Name="P_ID" />
+            </Principal>
+            <Dependent Role="Schools">
+              <PropertyRef Name="P_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ROOMS_REFERENCE_ROOMCATE">
+          <End Role="RoomCategories" Type="Self.RoomCategories" Multiplicity="0..1" />
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RoomCategories">
+              <PropertyRef Name="RC_ID" />
+            </Principal>
+            <Dependent Role="Rooms">
+              <PropertyRef Name="RC_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLAS_REFERENCE_ROOMS">
+          <End Role="Rooms" Type="Self.Rooms" Multiplicity="0..1" />
+          <End Role="TrainClassRooms" Type="Self.TrainClassRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="R_ID" />
+            </Principal>
+            <Dependent Role="TrainClassRooms">
+              <PropertyRef Name="R_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCHOOLCL_REFERENCE_SCHOOLS">
+          <End Role="Schools" Type="Self.Schools" Multiplicity="0..1" />
+          <End Role="SchoolClasses" Type="Self.SchoolClasses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schools">
+              <PropertyRef Name="School_ID" />
+            </Principal>
+            <Dependent Role="SchoolClasses">
+              <PropertyRef Name="School_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCHOOLCL_REFERENCE_SPECIALT">
+          <End Role="Specialties" Type="Self.Specialties" Multiplicity="0..1" />
+          <End Role="SchoolClasses" Type="Self.SchoolClasses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialties">
+              <PropertyRef Name="Specialty_ID" />
+            </Principal>
+            <Dependent Role="SchoolClasses">
+              <PropertyRef Name="Specialty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STUDENTS_REFERENCE_SCHOOLCL">
+          <End Role="SchoolClasses" Type="Self.SchoolClasses" Multiplicity="0..1" />
+          <End Role="Students" Type="Self.Students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SchoolClasses">
+              <PropertyRef Name="SC_ID" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="SC_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SELECTST_REFERENCE_SCHOOLS">
+          <End Role="Schools" Type="Self.Schools" Multiplicity="0..1" />
+          <End Role="SelectStationPeriods" Type="Self.SelectStationPeriods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schools">
+              <PropertyRef Name="School_ID" />
+            </Principal>
+            <Dependent Role="SelectStationPeriods">
+              <PropertyRef Name="School_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SELECTST_REFERENCE_SPECIALT">
+          <End Role="Specialties" Type="Self.Specialties" Multiplicity="0..1" />
+          <End Role="SelectStationPeriods" Type="Self.SelectStationPeriods" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialties">
+              <PropertyRef Name="Specialty_ID" />
+            </Principal>
+            <Dependent Role="SelectStationPeriods">
+              <PropertyRef Name="Specialty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STUDENTS_REFERENCE_STATIONS">
+          <End Role="Stations" Type="Self.Stations" Multiplicity="0..1" />
+          <End Role="Students" Type="Self.Students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stations">
+              <PropertyRef Name="Station_ID" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="Station_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLA_REFERENCE_Room">
+          <End Role="TrainClasses" Type="Self.TrainClasses" Multiplicity="0..1" />
+          <End Role="TrainClassRooms" Type="Self.TrainClassRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainClasses">
+              <PropertyRef Name="TC_ID" />
+            </Principal>
+            <Dependent Role="TrainClassRooms">
+              <PropertyRef Name="TC_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CRMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Floors" EntityType="Self.Floors" />
+          <EntitySet Name="Houses" EntityType="Self.Houses" />
+          <EntitySet Name="OperationLogs" EntityType="Self.OperationLogs" />
+          <EntitySet Name="Provinces" EntityType="Self.Provinces" />
+          <EntitySet Name="RoomCategories" EntityType="Self.RoomCategories" />
+          <EntitySet Name="Rooms" EntityType="Self.Rooms" />
+          <EntitySet Name="SchoolClasses" EntityType="Self.SchoolClasses" />
+          <EntitySet Name="Schools" EntityType="Self.Schools" />
+          <EntitySet Name="SelectStationPeriods" EntityType="Self.SelectStationPeriods" />
+          <EntitySet Name="Specialties" EntityType="Self.Specialties" />
+          <EntitySet Name="Stations" EntityType="Self.Stations" />
+          <EntitySet Name="Students" EntityType="Self.Students" />
+          <EntitySet Name="Teachers" EntityType="Self.Teachers" />
+          <EntitySet Name="TrainClasses" EntityType="Self.TrainClasses" />
+          <EntitySet Name="TrainClassRooms" EntityType="Self.TrainClassRooms" />
+          <AssociationSet Name="FK_FLOORS_REFERENCE_HOUSES" Association="Self.FK_FLOORS_REFERENCE_HOUSES">
+            <End Role="Houses" EntitySet="Houses" />
+            <End Role="Floors" EntitySet="Floors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ROOMS_REFERENCE_FLOORS" Association="Self.FK_ROOMS_REFERENCE_FLOORS">
+            <End Role="Floors" EntitySet="Floors" />
+            <End Role="Rooms" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OPERATIO_REFERENCE_TEACHERS" Association="Self.FK_OPERATIO_REFERENCE_TEACHERS">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="OperationLogs" EntitySet="OperationLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCHOOLS_REFERENCE_PROVINCE" Association="Self.FK_SCHOOLS_REFERENCE_PROVINCE">
+            <End Role="Provinces" EntitySet="Provinces" />
+            <End Role="Schools" EntitySet="Schools" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ROOMS_REFERENCE_ROOMCATE" Association="Self.FK_ROOMS_REFERENCE_ROOMCATE">
+            <End Role="RoomCategories" EntitySet="RoomCategories" />
+            <End Role="Rooms" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLAS_REFERENCE_ROOMS" Association="Self.FK_TRAINCLAS_REFERENCE_ROOMS">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="TrainClassRooms" EntitySet="TrainClassRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCHOOLCL_REFERENCE_SCHOOLS" Association="Self.FK_SCHOOLCL_REFERENCE_SCHOOLS">
+            <End Role="Schools" EntitySet="Schools" />
+            <End Role="SchoolClasses" EntitySet="SchoolClasses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCHOOLCL_REFERENCE_SPECIALT" Association="Self.FK_SCHOOLCL_REFERENCE_SPECIALT">
+            <End Role="Specialties" EntitySet="Specialties" />
+            <End Role="SchoolClasses" EntitySet="SchoolClasses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STUDENTS_REFERENCE_SCHOOLCL" Association="Self.FK_STUDENTS_REFERENCE_SCHOOLCL">
+            <End Role="SchoolClasses" EntitySet="SchoolClasses" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SELECTST_REFERENCE_SCHOOLS" Association="Self.FK_SELECTST_REFERENCE_SCHOOLS">
+            <End Role="Schools" EntitySet="Schools" />
+            <End Role="SelectStationPeriods" EntitySet="SelectStationPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SELECTST_REFERENCE_SPECIALT" Association="Self.FK_SELECTST_REFERENCE_SPECIALT">
+            <End Role="Specialties" EntitySet="Specialties" />
+            <End Role="SelectStationPeriods" EntitySet="SelectStationPeriods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STUDENTS_REFERENCE_STATIONS" Association="Self.FK_STUDENTS_REFERENCE_STATIONS">
+            <End Role="Stations" EntitySet="Stations" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLA_REFERENCE_Room" Association="Self.FK_TRAINCLA_REFERENCE_Room">
+            <End Role="TrainClasses" EntitySet="TrainClasses" />
+            <End Role="TrainClassRooms" EntitySet="TrainClassRooms" />
+          </AssociationSet>
+          <EntitySet Name="View_ChooseJobs" EntityType="CRMModel.View_ChooseJobs" />
+          <EntitySet Name="View_TrainClasses" EntityType="CRMModel.View_TrainClasses" />
+          <EntitySet Name="TrainClassTeachers" EntityType="CRMModel.TrainClassTeachers" />
+          <EntitySet Name="View_SchoolS" EntityType="CRMModel.View_SchoolS" />
+          <EntitySet Name="View_Stations" EntityType="CRMModel.View_Stations" />
+          <EntitySet Name="SpecialtyStations" EntityType="CRMModel.SpecialtyStations" />
+          <EntitySet Name="View_TrainTeachers" EntityType="CRMModel.View_TrainTeachers" />
+          <EntitySet Name="View_Students" EntityType="CRMModel.View_Students" />
+          <EntitySet Name="TrainClassStudents" EntityType="CRMModel.TrainClassStudents" />
+          <AssociationSet Name="FK_TRAINCLASS_REFERENCE_ROOMS" Association="CRMModel.FK_TRAINCLASS_REFERENCE_ROOMS">
+            <End Role="Rooms" EntitySet="Rooms" />
+            <End Role="TrainClassStudents" EntitySet="TrainClassStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLA_REFERENCE_STUDENTS" Association="CRMModel.FK_TRAINCLA_REFERENCE_STUDENTS">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="TrainClassStudents" EntitySet="TrainClassStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRAINCLA_REFERENCE_Student" Association="CRMModel.FK_TRAINCLA_REFERENCE_Student">
+            <End Role="TrainClasses" EntitySet="TrainClasses" />
+            <End Role="TrainClassStudents" EntitySet="TrainClassStudents" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="View_ChooseJobs">
+          <Key>
+            <PropertyRef Name="School_ID" />
+            <PropertyRef Name="School_Code" />
+            <PropertyRef Name="School_Name" />
+          </Key>
+          <Property Name="School_ID" Type="Int32" Nullable="false" />
+          <Property Name="P_ID" Type="Int32" />
+          <Property Name="School_Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="School_Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="School_Remark" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="P_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SSP_PreachDate" Type="DateTime" Precision="0" />
+          <Property Name="SSP_OverDay" Type="Byte" />
+          <Property Name="Specialty_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="View_TrainClasses">
+          <Key>
+            <PropertyRef Name="TC_ID" />
+            <PropertyRef Name="TC_Name" />
+            <PropertyRef Name="TC_Grade" />
+            <PropertyRef Name="TC_BeginTime" />
+            <PropertyRef Name="TC_EndTime" />
+            <PropertyRef Name="TC_MaxAmount" />
+          </Key>
+          <Property Name="Teacher" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Councilor" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TC_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TC_Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TC_Grade" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TC_BeginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TC_EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TC_MaxAmount" Type="Byte" Nullable="false" />
+          <Property Name="TC_MaleAmount" Type="Byte" />
+          <Property Name="TC_FemaleAmount" Type="Byte" />
+          <Property Name="TC_Period" Type="Byte" />
+        </EntityType>
+        <EntityType Name="TrainClassTeachers">
+          <Key>
+            <PropertyRef Name="Tran_ID" />
+          </Key>
+          <Property Name="TC_ID" Type="Int32" />
+          <Property Name="T_ID" Type="Int32" />
+          <Property Name="Tran_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="View_SchoolS">
+          <Key>
+            <PropertyRef Name="School_ID" />
+          </Key>
+          <Property Name="P_ID" Type="Int32" />
+          <Property Name="P_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="P_Remark" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="School_ID" Type="Int32" Nullable="false" />
+          <Property Name="School_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="School_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="School_Remark" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="View_Stations">
+          <Key>
+            <PropertyRef Name="Station_ID" />
+            <PropertyRef Name="Station_Name" />
+            <PropertyRef Name="Station_Duty" />
+            <PropertyRef Name="Station_NeedTechnique" />
+          </Key>
+          <Property Name="Station_ID" Type="Int32" Nullable="false" />
+          <Property Name="Station_Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Station_Duty" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Station_NeedTechnique" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Specialty_ID" Type="Int32" />
+          <Property Name="School_ID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SpecialtyStations">
+          <Key>
+            <PropertyRef Name="SS_ID" />
+          </Key>
+          <Property Name="Specialty_ID" Type="Int32" />
+          <Property Name="Station_ID" Type="Int32" />
+          <Property Name="School_ID" Type="Int32" />
+          <Property Name="SS_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="View_TrainTeachers">
+          <Key>
+            <PropertyRef Name="num" />
+          </Key>
+          <Property Name="T_Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TC_ID" Type="Int32" />
+          <Property Name="T_ID" Type="Int32" />
+          <Property Name="Tran_ID" Type="Int32" />
+          <Property Name="T_Role" Type="Byte" Nullable="false" />
+          <Property Name="num" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="View_Students">
+          <Key>
+            <PropertyRef Name="Student_ID" />
+          </Key>
+          <Property Name="Student_ID" Type="Int32" Nullable="false" />
+          <Property Name="Student_Name" Type="String" MaxLength="110" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Sex" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Specialty" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Student_Schoolofgraduation" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Student_PersonalTel" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="TC_ID" Type="Int32" />
+          <Property Name="Station_ID" Type="Int32" />
+          <Property Name="Station_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TC_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SC_ID" Type="Int32" />
+          <Property Name="Specialty_ID" Type="Int32" />
+          <Property Name="SC_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="School_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="P_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="P_ID" Type="Int32" />
+          <Property Name="School_ID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="TrainClassStudents">
+          <Key>
+            <PropertyRef Name="Student_ID" />
+          </Key>
+          <Property Name="Student_ID" Type="Int32" Nullable="false" />
+          <Property Name="TC_ID" Type="Int32" />
+          <Property Name="R_ID" Type="Int32" />
+          <Property Name="Student_IsHasAllotRoom" Type="Boolean" />
+          <NavigationProperty Name="Rooms" Relationship="CRMModel.FK_TRAINCLASS_REFERENCE_ROOMS" FromRole="TrainClassStudents" ToRole="Rooms" />
+          <NavigationProperty Name="Students" Relationship="CRMModel.FK_TRAINCLA_REFERENCE_STUDENTS" FromRole="TrainClassStudents" ToRole="Students" />
+          <NavigationProperty Name="TrainClasses" Relationship="CRMModel.FK_TRAINCLA_REFERENCE_Student" FromRole="TrainClassStudents" ToRole="TrainClasses" />
+        </EntityType>
+        <Association Name="FK_TRAINCLASS_REFERENCE_ROOMS">
+          <End Type="CRMModel.Rooms" Role="Rooms" Multiplicity="0..1" />
+          <End Type="CRMModel.TrainClassStudents" Role="TrainClassStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rooms">
+              <PropertyRef Name="R_ID" />
+            </Principal>
+            <Dependent Role="TrainClassStudents">
+              <PropertyRef Name="R_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLA_REFERENCE_STUDENTS">
+          <End Type="CRMModel.Students" Role="Students" Multiplicity="1" />
+          <End Type="CRMModel.TrainClassStudents" Role="TrainClassStudents" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="Student_ID" />
+            </Principal>
+            <Dependent Role="TrainClassStudents">
+              <PropertyRef Name="Student_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRAINCLA_REFERENCE_Student">
+          <End Type="CRMModel.TrainClasses" Role="TrainClasses" Multiplicity="0..1" />
+          <End Type="CRMModel.TrainClassStudents" Role="TrainClassStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrainClasses">
+              <PropertyRef Name="TC_ID" />
+            </Principal>
+            <Dependent Role="TrainClassStudents">
+              <PropertyRef Name="TC_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CRMModelStoreContainer" CdmEntityContainer="CRMEntities">
+          <EntitySetMapping Name="Floors">
+            <EntityTypeMapping TypeName="CRMModel.Floors">
+              <MappingFragment StoreEntitySet="Floors">
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+                <ScalarProperty Name="H_ID" ColumnName="H_ID" />
+                <ScalarProperty Name="F_Name" ColumnName="F_Name" />
+                <ScalarProperty Name="F_Remark" ColumnName="F_Remark" />
+                <ScalarProperty Name="F_MaleOrFemale" ColumnName="F_MaleOrFemale" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Houses">
+            <EntityTypeMapping TypeName="CRMModel.Houses">
+              <MappingFragment StoreEntitySet="Houses">
+                <ScalarProperty Name="H_ID" ColumnName="H_ID" />
+                <ScalarProperty Name="H_Name" ColumnName="H_Name" />
+                <ScalarProperty Name="H_Remark" ColumnName="H_Remark" />
+                <ScalarProperty Name="H_MaleOrFemale" ColumnName="H_MaleOrFemale" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OperationLogs">
+            <EntityTypeMapping TypeName="CRMModel.OperationLogs">
+              <MappingFragment StoreEntitySet="OperationLogs">
+                <ScalarProperty Name="PL_ID" ColumnName="PL_ID" />
+                <ScalarProperty Name="T_ID" ColumnName="T_ID" />
+                <ScalarProperty Name="PL_TableName" ColumnName="PL_TableName" />
+                <ScalarProperty Name="PL_Operation" ColumnName="PL_Operation" />
+                <ScalarProperty Name="PL_Description" ColumnName="PL_Description" />
+                <ScalarProperty Name="PL_Time" ColumnName="PL_Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Provinces">
+            <EntityTypeMapping TypeName="CRMModel.Provinces">
+              <MappingFragment StoreEntitySet="Provinces">
+                <ScalarProperty Name="P_ID" ColumnName="P_ID" />
+                <ScalarProperty Name="P_Name" ColumnName="P_Name" />
+                <ScalarProperty Name="P_Remark" ColumnName="P_Remark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoomCategories">
+            <EntityTypeMapping TypeName="CRMModel.RoomCategories">
+              <MappingFragment StoreEntitySet="RoomCategories">
+                <ScalarProperty Name="RC_ID" ColumnName="RC_ID" />
+                <ScalarProperty Name="RC_Name" ColumnName="RC_Name" />
+                <ScalarProperty Name="RC_Count" ColumnName="RC_Count" />
+                <ScalarProperty Name="RC_MoneyPerMonth" ColumnName="RC_MoneyPerMonth" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms">
+            <EntityTypeMapping TypeName="CRMModel.Rooms">
+              <MappingFragment StoreEntitySet="Rooms">
+                <ScalarProperty Name="R_ID" ColumnName="R_ID" />
+                <ScalarProperty Name="F_ID" ColumnName="F_ID" />
+                <ScalarProperty Name="RC_ID" ColumnName="RC_ID" />
+                <ScalarProperty Name="R_Name" ColumnName="R_Name" />
+                <ScalarProperty Name="R_MaleOrFemale" ColumnName="R_MaleOrFemale" />
+                <ScalarProperty Name="R_IsHasFull" ColumnName="R_IsHasFull" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SchoolClasses">
+            <EntityTypeMapping TypeName="CRMModel.SchoolClasses">
+              <MappingFragment StoreEntitySet="SchoolClasses">
+                <ScalarProperty Name="SC_ID" ColumnName="SC_ID" />
+                <ScalarProperty Name="School_ID" ColumnName="School_ID" />
+                <ScalarProperty Name="Specialty_ID" ColumnName="Specialty_ID" />
+                <ScalarProperty Name="SC_Name" ColumnName="SC_Name" />
+                <ScalarProperty Name="SC_FemaleAmount" ColumnName="SC_FemaleAmount" />
+                <ScalarProperty Name="SC_MaleAmount" ColumnName="SC_MaleAmount" />
+                <ScalarProperty Name="SC_Teacher" ColumnName="SC_Teacher" />
+                <ScalarProperty Name="SC_Supervisor" ColumnName="SC_Supervisor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schools">
+            <EntityTypeMapping TypeName="CRMModel.Schools">
+              <MappingFragment StoreEntitySet="Schools">
+                <ScalarProperty Name="School_ID" ColumnName="School_ID" />
+                <ScalarProperty Name="P_ID" ColumnName="P_ID" />
+                <ScalarProperty Name="School_Code" ColumnName="School_Code" />
+                <ScalarProperty Name="School_Name" ColumnName="School_Name" />
+                <ScalarProperty Name="School_Remark" ColumnName="School_Remark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SelectStationPeriods">
+            <EntityTypeMapping TypeName="CRMModel.SelectStationPeriods">
+              <MappingFragment StoreEntitySet="SelectStationPeriods">
+                <ScalarProperty Name="SSP_ID" ColumnName="SSP_ID" />
+                <ScalarProperty Name="School_ID" ColumnName="School_ID" />
+                <ScalarProperty Name="Specialty_ID" ColumnName="Specialty_ID" />
+                <ScalarProperty Name="SSP_PreachDate" ColumnName="SSP_PreachDate" />
+                <ScalarProperty Name="SSP_OverDay" ColumnName="SSP_OverDay" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Specialties">
+            <EntityTypeMapping TypeName="CRMModel.Specialties">
+              <MappingFragment StoreEntitySet="Specialties">
+                <ScalarProperty Name="Specialty_ID" ColumnName="Specialty_ID" />
+                <ScalarProperty Name="Specialty_Name" ColumnName="Specialty_Name" />
+                <ScalarProperty Name="Specialty_Description" ColumnName="Specialty_Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stations">
+            <EntityTypeMapping TypeName="CRMModel.Stations">
+              <MappingFragment StoreEntitySet="Stations">
+                <ScalarProperty Name="Station_ID" ColumnName="Station_ID" />
+                <ScalarProperty Name="Station_Name" ColumnName="Station_Name" />
+                <ScalarProperty Name="Station_Duty" ColumnName="Station_Duty" />
+                <ScalarProperty Name="Station_NeedTechnique" ColumnName="Station_NeedTechnique" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="CRMModel.Students">
+              <MappingFragment StoreEntitySet="Students">
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
+                <ScalarProperty Name="SC_ID" ColumnName="SC_ID" />
+                <ScalarProperty Name="Student_NO" ColumnName="Student_NO" />
+                <ScalarProperty Name="Student_Name" ColumnName="Student_Name" />
+                <ScalarProperty Name="Student_NameSpell" ColumnName="Student_NameSpell" />
+                <ScalarProperty Name="Student_Sex" ColumnName="Student_Sex" />
+                <ScalarProperty Name="Student_IdentityNumber" ColumnName="Student_IdentityNumber" />
+                <ScalarProperty Name="Student_State" ColumnName="Student_State" />
+                <ScalarProperty Name="Student_Exam" ColumnName="Student_Exam" />
+                <ScalarProperty Name="Student_Education" ColumnName="Student_Education" />
+                <ScalarProperty Name="Student_Specialty" ColumnName="Student_Specialty" />
+                <ScalarProperty Name="Student_Schoolofgraduation" ColumnName="Student_Schoolofgraduation" />
+                <ScalarProperty Name="Student_PersonalTel" ColumnName="Student_PersonalTel" />
+                <ScalarProperty Name="Student_FamilyTel" ColumnName="Student_FamilyTel" />
+                <ScalarProperty Name="Student_QQ" ColumnName="Student_QQ" />
+                <ScalarProperty Name="Student_Address" ColumnName="Student_Address" />
+                <ScalarProperty Name="Student_PostCode" ColumnName="Student_PostCode" />
+                <ScalarProperty Name="Student_EducationMoney" ColumnName="Student_EducationMoney" />
+                <ScalarProperty Name="Student_SkillTrainingMoney" ColumnName="Student_SkillTrainingMoney" />
+                <ScalarProperty Name="Student_TrainResideMoney" ColumnName="Student_TrainResideMoney" />
+                <ScalarProperty Name="Student_Evaluate1" ColumnName="Student_Evaluate1" />
+                <ScalarProperty Name="Student_Evaluate2" ColumnName="Student_Evaluate2" />
+                <ScalarProperty Name="Student_Remark" ColumnName="Student_Remark" />
+                <ScalarProperty Name="Station_ID" ColumnName="Station_ID" />
+                <ScalarProperty Name="Stationt_SelectStationCount" ColumnName="Stationt_SelectStationCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teachers">
+            <EntityTypeMapping TypeName="CRMModel.Teachers">
+              <MappingFragment StoreEntitySet="Teachers">
+                <ScalarProperty Name="T_ID" ColumnName="T_ID" />
+                <ScalarProperty Name="T_Name" ColumnName="T_Name" />
+                <ScalarProperty Name="T_Sex" ColumnName="T_Sex" />
+                <ScalarProperty Name="T_Tel" ColumnName="T_Tel" />
+                <ScalarProperty Name="T_Category" ColumnName="T_Category" />
+                <ScalarProperty Name="T_LoginName" ColumnName="T_LoginName" />
+                <ScalarProperty Name="T_Pwd" ColumnName="T_Pwd" />
+                <ScalarProperty Name="T_Role" ColumnName="T_Role" />
+                <ScalarProperty Name="T_IsEnabled" ColumnName="T_IsEnabled" />
+                <ScalarProperty Name="T_LastLoginTime" ColumnName="T_LastLoginTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrainClasses">
+            <EntityTypeMapping TypeName="CRMModel.TrainClasses">
+              <MappingFragment StoreEntitySet="TrainClasses">
+                <ScalarProperty Name="TC_ID" ColumnName="TC_ID" />
+                <ScalarProperty Name="TC_Name" ColumnName="TC_Name" />
+                <ScalarProperty Name="TC_Grade" ColumnName="TC_Grade" />
+                <ScalarProperty Name="TC_BeginTime" ColumnName="TC_BeginTime" />
+                <ScalarProperty Name="TC_EndTime" ColumnName="TC_EndTime" />
+                <ScalarProperty Name="TC_MaxAmount" ColumnName="TC_MaxAmount" />
+                <ScalarProperty Name="TC_MaleAmount" ColumnName="TC_MaleAmount" />
+                <ScalarProperty Name="TC_FemaleAmount" ColumnName="TC_FemaleAmount" />
+                <ScalarProperty Name="TC_Period" ColumnName="TC_Period" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrainClassRooms">
+            <EntityTypeMapping TypeName="CRMModel.TrainClassRooms">
+              <MappingFragment StoreEntitySet="TrainClassRooms">
+                <ScalarProperty Name="TC_ID" ColumnName="TC_ID" />
+                <ScalarProperty Name="R_ID" ColumnName="R_ID" />
+                <ScalarProperty Name="TC_RealPersonAmount" ColumnName="TC_RealPersonAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_ChooseJobs">
+            <EntityTypeMapping TypeName="CRMModel.View_ChooseJobs">
+              <MappingFragment StoreEntitySet="View_ChooseJobs">
+                <ScalarProperty Name="Specialty_Name" ColumnName="Specialty_Name" />
+                <ScalarProperty Name="SSP_OverDay" ColumnName="SSP_OverDay" />
+                <ScalarProperty Name="SSP_PreachDate" ColumnName="SSP_PreachDate" />
+                <ScalarProperty Name="P_Name" ColumnName="P_Name" />
+                <ScalarProperty Name="School_Remark" ColumnName="School_Remark" />
+                <ScalarProperty Name="School_Name" ColumnName="School_Name" />
+                <ScalarProperty Name="School_Code" ColumnName="School_Code" />
+                <ScalarProperty Name="P_ID" ColumnName="P_ID" />
+                <ScalarProperty Name="School_ID" ColumnName="School_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_TrainClasses">
+            <EntityTypeMapping TypeName="CRMModel.View_TrainClasses">
+              <MappingFragment StoreEntitySet="View_TrainClasses">
+                <ScalarProperty Name="TC_Period" ColumnName="TC_Period" />
+                <ScalarProperty Name="TC_FemaleAmount" ColumnName="TC_FemaleAmount" />
+                <ScalarProperty Name="TC_MaleAmount" ColumnName="TC_MaleAmount" />
+                <ScalarProperty Name="TC_MaxAmount" ColumnName="TC_MaxAmount" />
+                <ScalarProperty Name="TC_EndTime" ColumnName="TC_EndTime" />
+                <ScalarProperty Name="TC_BeginTime" ColumnName="TC_BeginTime" />
+                <ScalarProperty Name="TC_Grade" ColumnName="TC_Grade" />
+                <ScalarProperty Name="TC_Name" ColumnName="TC_Name" />
+                <ScalarProperty Name="TC_ID" ColumnName="TC_ID" />
+                <ScalarProperty Name="Councilor" ColumnName="Councilor" />
+                <ScalarProperty Name="Teacher" ColumnName="Teacher" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrainClassTeachers">
+            <EntityTypeMapping TypeName="CRMModel.TrainClassTeachers">
+              <MappingFragment StoreEntitySet="TrainClassTeachers">
+                <ScalarProperty Name="Tran_ID" ColumnName="Tran_ID" />
+                <ScalarProperty Name="T_ID" ColumnName="T_ID" />
+                <ScalarProperty Name="TC_ID" ColumnName="TC_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_SchoolS">
+            <EntityTypeMapping TypeName="CRMModel.View_SchoolS">
+              <MappingFragment StoreEntitySet="View_SchoolS">
+                <ScalarProperty Name="School_Remark" ColumnName="School_Remark" />
+                <ScalarProperty Name="School_Name" ColumnName="School_Name" />
+                <ScalarProperty Name="School_Code" ColumnName="School_Code" />
+                <ScalarProperty Name="School_ID" ColumnName="School_ID" />
+                <ScalarProperty Name="P_Remark" ColumnName="P_Remark" />
+                <ScalarProperty Name="P_Name" ColumnName="P_Name" />
+                <ScalarProperty Name="P_ID" ColumnName="P_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_Stations">
+            <EntityTypeMapping TypeName="CRMModel.View_Stations">
+              <MappingFragment StoreEntitySet="View_Stations">
+                <ScalarProperty Name="School_ID" ColumnName="School_ID" />
+                <ScalarProperty Name="Specialty_ID" ColumnName="Specialty_ID" />
+                <ScalarProperty Name="Station_NeedTechnique" ColumnName="Station_NeedTechnique" />
+                <ScalarProperty Name="Station_Duty" ColumnName="Station_Duty" />
+                <ScalarProperty Name="Station_Name" ColumnName="Station_Name" />
+                <ScalarProperty Name="Station_ID" ColumnName="Station_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecialtyStations">
+            <EntityTypeMapping TypeName="CRMModel.SpecialtyStations">
+              <MappingFragment StoreEntitySet="SpecialtyStations">
+                <ScalarProperty Name="SS_ID" ColumnName="SS_ID" />
+                <ScalarProperty Name="School_ID" ColumnName="School_ID" />
+                <ScalarProperty Name="Station_ID" ColumnName="Station_ID" />
+                <ScalarProperty Name="Specialty_ID" ColumnName="Specialty_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_TrainTeachers">
+            <EntityTypeMapping TypeName="CRMModel.View_TrainTeachers">
+              <MappingFragment StoreEntitySet="View_TrainTeachers">
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="T_Role" ColumnName="T_Role" />
+                <ScalarProperty Name="Tran_ID" ColumnName="Tran_ID" />
+                <ScalarProperty Name="T_ID" ColumnName="T_ID" />
+                <ScalarProperty Name="TC_ID" ColumnName="TC_ID" />
+                <ScalarProperty Name="T_Name" ColumnName="T_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_Students">
+            <EntityTypeMapping TypeName="CRMModel.View_Students">
+              <MappingFragment StoreEntitySet="View_Students">
+                <ScalarProperty Name="School_ID" ColumnName="School_ID" />
+                <ScalarProperty Name="P_ID" ColumnName="P_ID" />
+                <ScalarProperty Name="P_Name" ColumnName="P_Name" />
+                <ScalarProperty Name="School_Name" ColumnName="School_Name" />
+                <ScalarProperty Name="SC_Name" ColumnName="SC_Name" />
+                <ScalarProperty Name="Specialty_ID" ColumnName="Specialty_ID" />
+                <ScalarProperty Name="SC_ID" ColumnName="SC_ID" />
+                <ScalarProperty Name="TC_Name" ColumnName="TC_Name" />
+                <ScalarProperty Name="Station_Name" ColumnName="Station_Name" />
+                <ScalarProperty Name="Station_ID" ColumnName="Station_ID" />
+                <ScalarProperty Name="TC_ID" ColumnName="TC_ID" />
+                <ScalarProperty Name="Student_PersonalTel" ColumnName="Student_PersonalTel" />
+                <ScalarProperty Name="Student_Schoolofgraduation" ColumnName="Student_Schoolofgraduation" />
+                <ScalarProperty Name="Student_Specialty" ColumnName="Student_Specialty" />
+                <ScalarProperty Name="Student_Sex" ColumnName="Student_Sex" />
+                <ScalarProperty Name="Student_Name" ColumnName="Student_Name" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrainClassStudents">
+            <EntityTypeMapping TypeName="CRMModel.TrainClassStudents">
+              <MappingFragment StoreEntitySet="TrainClassStudents">
+                <ScalarProperty Name="Student_IsHasAllotRoom" ColumnName="Student_IsHasAllotRoom" />
+                <ScalarProperty Name="R_ID" ColumnName="R_ID" />
+                <ScalarProperty Name="TC_ID" ColumnName="TC_ID" />
+                <ScalarProperty Name="Student_ID" ColumnName="Student_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

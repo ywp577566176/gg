@@ -1,0 +1,213 @@
+﻿
+@{
+    Layout = null;
+}
+<style>
+    .la {
+        margin-left: -50px;
+    }
+</style>
+
+<div id="setClass">
+    <div class="templatemo-content-wrapper">
+        <div class="templatemo-content">
+            <ol class="breadcrumb">
+                <li><a href="index.html">Admin Panel</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li class="active">Overview</li>
+                <li><a href="sign-in.html">Sign In Form</a></li>
+            </ol>
+            <h1>Dashboard</h1>
+            <div class="margin-bottom-30">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-pills">
+                            <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+                            <li class="active"><a href="#">Profile <span class="badge">126</span></a></li>
+                            <li class="active"><a href="#">Messages <span class="badge">14</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <form class="form-horizontal" role="form">
+                 <label>请选择时间：</label>  
+                <input type="date" />     
+                <button type="button" v-on:click="getClass" class="btn btn-default">查询</button>            
+            </form>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>实训班级名称</th>
+                        <th>进入实训时间</th>
+                        <th>景宁就业时间</th>
+                        <th>实训允许最大人数</th>
+                        <th>实际男生人数</th>
+                        <th>实际女生人数</th>
+                        <th>总人数</th>
+                        <th>实训周期</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(cls,index) in TrainClasses">
+                        <td>{{index+1}}</td>
+                        <td>{{cls.TC_Name}}</td>
+                        <td>{{cls.TC_BeginTime}}</td>
+                        <td>{{cls.TC_EndTime}}</td>
+                        <td>{{cls.TC_MaxAmount}}</td>
+                        <td>{{cls.TC_MaleAmount}}</td>
+                        <td>{{cls.TC_FemaleAmount}}</td>
+                        <td>{{cls.TC_MaleAmount+cls.TC_FemaleAmount}}</td>
+                        <td>待定</td>
+                        <td><button v-on:click="getStudent(cls.TC_ID)" type="button">查看</button>
+                            <button  type="button">导出此班学生信息</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            @*<ul class="pagination">
+                <li class="{'disabled':pageIndex==1}" v-on:click="pageClick(1)"><a href="#">&laquo;</a></li>
+                <li v-for="page in pageCount" name="page" v-on:click="pageClick(page)" class="{'active':pageIndex==page}"><a href="#">{{page}}</a></li>
+                <li class="{'disabled':pageIndex==pageAll} " v-on:click="pageClick(pageAll)"><a href="#">&raquo;</a></li>
+
+            </ul>*@
+
+        </div>
+
+    </div>
+    <div style="margin:15% auto" class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">查看实训班级信息</h4>
+                </div>
+                <div class="modal-body">
+                   <table>
+                       <thead>
+                           <tr>
+                               <th></th>
+                               <th>学生姓名</th>
+                               <th>学号</th>
+                               <th>性别</th>
+                               <th>身份证号</th>
+                               <th>学生状态</th>
+                               <th>已通过认证</th>
+                               <th>学历</th>
+                               <th>专业</th>
+                           </tr>
+                         
+                       </thead>
+                       <tbody>
+                           <tr v-for="(stu,index) in studen">
+                               <td>{{index+1}}</td>
+                               <td>{{stu.Student_Name}}</td>
+                               <td>{{}}</td>
+                               <td>{{}}</td>
+                               <td>{{}}</td>
+                               <td>{{}}</td>
+                               <td>{{}}</td>
+                               <td>{{}}</td>
+                               <td>{{}}</td>
+                           </tr>
+                       </tbody>
+                   </table>
+
+
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal"> 关闭</button>
+                <button type="button" v-on:click="addOrUpdateClass" class="btn btn-primary">提交更改 </button>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+
+<div id="abc">
+
+</div>
+<script> 
+    new Vue({
+        el: "#setClass",
+        data: {
+            TrainClasses: [],
+            student:[],
+               //分页
+                pageCount:[],
+                pageIndex: 1,
+                pageAll:0
+
+        },
+        mounted() {
+            this.getClass();
+
+        },
+        methods: {
+            //显示模态窗口
+            modalShow: function(id, name) {
+             
+
+            },                    
+            //获取实训班级数据
+            getClass: function () {
+                mydata = this;
+                axios.post("/TrainClasses/GetTrainClassesDDL").then(m=> {
+                    mydata.TrainClasses = m.data;
+                    for (var t = 0; t < m.data.length; t++)
+                    {
+                        mydata.TrainClasses[t].TC_BeginTime = ChangeDateFormat(mydata.TrainClasses[t].TC_BeginTime);
+                        mydata.TrainClasses[t].TC_EndTime = ChangeDateFormat(mydata.TrainClasses[t].TC_EndTime);
+                    }
+                   
+                   
+                    //myData.pageAll = m.data.pageCount;
+                    //$("ul li[name='page']").remove();
+                   // 分页
+                    //if (m.data.pageCount <= 9) {
+                    //    for (var t = 0; t < m.data.pageCount; t++) {
+                    //        myData.pageCount.push(t + 1);
+                    //    }
+                    //}
+                    //else {
+                    //    if (myData.pageIndex >= 5 && myData.pageIndex <= (myData.pageAll - 5)) {
+                    //        for (var t = 0; t < 9; t++) {
+                    //            var num = myData.pageIndex + t - 4
+                    //            myData.pageCount.push(num);
+                    //        }
+                    //    }
+                    //    else if(myData.pageIndex>=(myData.pageAll-5))
+                    //    {
+                    //        for (var t = 0; t < 9; t++) {
+                    //            var num = myData.pageAll - 8 + t;
+                    //            myData.pageCount.push(num);
+                    //        }
+
+                    //    }
+                    //    else {
+                    //        for (var t = 0; t < 9; t++) {
+                    //            myData.pageCount.push(t + 1);
+                    //        }
+                    //    }
+
+                    //};                                  
+                }).catch(Error=>alert(Error));
+
+            },
+            //获取学生信息
+            getStudent: function (cID) {
+                axios.post("/TrainClassStudents/GeCIDStudents", { cID: cID }).then(
+                    function (res) {
+                        mydata.student = res.data;
+                    }).catch(Error=>alert(Error));
+            }
+            //分页点击事件
+            //pageClick: function (page) {
+            //    myData.pageIndex = page;
+            //    myData.getViewTrainClassStudents(-1);
+            //}
+
+        }
+    });
+</script>
+@*<script type="text/javascript" src="http://localhost:3216/Scripts/web.js"></script>*@

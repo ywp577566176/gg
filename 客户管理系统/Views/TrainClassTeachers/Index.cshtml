@@ -1,0 +1,302 @@
+﻿
+@{
+    Layout = null;
+}
+<style>
+    .la {
+        margin-left: -50px;
+    }
+</style>
+<div class="templatemo-content-wrapper">
+    <div class="templatemo-content">
+        <ol class="breadcrumb">
+            <li><a href="index.html">Admin Panel</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li class="active">Overview</li>
+            <li><a href="sign-in.html">Sign In Form</a></li>
+        </ol>
+        <h1>Dashboard</h1>
+        <div class="margin-bottom-30">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills">
+                        <li class="active"><a href="#">Home <span class="badge">42</span></a></li>
+                        <li class="active"><a href="#">Profile <span class="badge">126</span></a></li>
+                        <li class="active"><a href="#">Messages <span class="badge">14</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <form class="form-horizontal" role="form" id="SerchTeachs">
+            <div class="margin-bottom-30">
+                <div class="row">
+                    <label class="control-label">老师姓名：</label>
+                    <input type="text" name="tName" placeholder="请输入姓名">  
+                    <label class="control-label">督导/教员：</label>                
+                    <select name="tRole">
+                        <option value="0">==请选择==</option>
+                        <option value="1">教员</option>
+                        <option value="2">督导</option>
+                    </select>
+                    <button type="button" id="searchTeacher" class="btn-default">查询</button>                   
+                </div>
+            </div>
+            <div class="form-group" style="display:none">
+                <input type="text" class="form-control" name="pageIndex" id="page">
+            </div>
+
+
+        </form>
+
+        <table class="table" id="tabTeachers">
+            <thead>
+                <tr>
+                    <th>老师姓名</th>
+                    <th>老师性别</th>
+                    <th>老师电话</th>
+                    <th>教员/督导</th>                
+                    <th>操作</th>
+                   
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li class="disabled"><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&raquo;</a></li>
+
+        </ul>
+
+    </div>
+</div>
+
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+               <label>当前所选角色是：</label><label id="IDCard" >身份</label><br />
+                <input type="radio" name="rdoClass" value="0" />未分配班级
+                <input type="radio" name="rdoClass" value="1" />所带班级
+                <input type="radio" name="rdoClass" value="2" checked="checked" id="rdoAllClass"/>全部班级
+                <button type="button" id="SerachTranClass">查询</button>
+                <button type="button" id="save">保存</button>
+                <table class="table" id="tabTranClass">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" /></th>
+                            <th>实训所带班级</th>
+                            <th>实训班级老师</th>                         
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> 关 闭</button>
+            
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script>
+       
+        //查询所带班级信息
+        function updateSchool(tID)
+        {
+
+            $("#Modal").modal("show");
+            $("#myModalLabel").text("修改用户");
+            $("#loginPwd").hide();
+            $.getJSON("/Teachers/GetTeacherTID", { tID: tID }, function (res) {
+                if(res==null)
+                {
+                    alert("该用户已不存在，请刷新页面");
+                }
+                else
+                {
+                    $("#addTName").val(res.T_Name);
+                    $("#addTPwd").val(res.T_Pwd);
+
+                    $(":radio[name='T_Sex']").each(function () {
+                        if($(this).val()==res.T_Sex)
+                        {
+                            $(this).prop("checked", true);
+                        }
+
+                    });
+                    $("#addTTel").val(res.T_Tel);
+                    $("#addTlogName").val(res.T_LoginName);
+                    $("#addTCate").val(res.T_Category);
+                    $("#addTRole").val(res.T_Role);
+                    $("#tID").val(res.T_ID);
+                }
+            });
+        }
+        //查询教师数据
+        function Serach(pageIndex) {
+
+            $("#page").val(pageIndex);
+            $.get("/Teachers/GetTeachersView", $("#SerchTeachs").serialize(), function (res) {
+                $("#tabTeachers tbody").empty();
+                if (res.rows.length == 0)
+                {
+                    if (pageIndex > 1)
+                        Serach(pageIndex - 1);
+                }
+                else
+                {
+                    for (var t = 0; t < res.rows.length; t++) {
+                        if (res.rows[t].T_Role == 1)
+                            var teach = "教员";
+                        else if (res.rows[t].T_Role == 2)
+                            var teach = "督导";
+                        else
+                            var teach = "系统管理员";
+                        //alert(teach);
+                        var add = $("<tr>" +
+                                "<td>" + res.rows[t].T_Name + "</td>" +
+                                "<td>" + res.rows[t].T_Sex+ "</td>" +
+                                "<td>" + res.rows[t].T_Tel + "</td>" +
+                                "<td>" + (res.rows[t].T_Category == 1 ? "教员" : "督导") + "</td>" +                           
+                                "<td><button onclick=updateTrainClassTeachers('" + res.rows[t].T_ID+"','"+ res.rows[t].T_Category + "') type=\"button\" class=\"btn btn-success\">设置所带实训班级</button>" +
+                                "</td>" +                              
+                                "</tr>"
+                        )
+
+                        $("#tabTeachers tbody").append(add);
+
+                        //alert($(".table tbody tr:last").html());
+                    }
+                    $(".pagination").empty();
+                    if (pageIndex == 1)
+                        $(".pagination").append("<li class=\"disabled\" ><a href=\"#\">&laquo;</a></li>");
+                    else
+                        $(".pagination").append("<li onclick=\"Serach(1)\" ><a href=\"#\">&laquo;</a></li>");
+                    if (pageIndex > 3) {
+                        for (var t = pageIndex - 2; t < pageIndex + 3; t++) {
+
+                            if (pageIndex == t)
+                                $(".pagination").append("<li  class=\"active\"><a href=\"#\">" + t + "</a></li>");
+                            else
+                                $(".pagination").append("<li onclick=\"Serach(" + t + ")\"> <a href=\"#\">" + t + "</a></li>");
+                            if (t == res.total) {
+                                break;
+                            }
+
+                        }
+                    }
+                    else {
+                        for (var t = 1; t <= res.total; t++) {
+                            if (pageIndex == t)
+                                $(".pagination").append("<li  class=\"active\"><a href=\"#\">" + t + "</a></li>");
+                            else
+                                $(".pagination").append("<li onclick=\"Serach(" + t + ")\" >  <a href=\"#\">" + t + "</a></li>");
+                            if (t == 5) {
+                                break;
+                            }
+                        }
+                    }
+                    if (pageIndex == res.total)
+                        $(".pagination").append("<li class=\"disabled\"><a href=\"#\">&raquo;</a></li>");
+                    else
+                        $(".pagination").append("<li onclick=\"Serach(" + res.total + ")\" ><a href=\"#\">&raquo;</a></li>");
+                }
+
+
+            });
+
+        }
+       //查询所带班级数据
+        function updateTrainClassTeachers(tID, tCate)
+        {
+            var type = $(":radio[name='rdoClass']:checked").val();
+            
+            $("#Modal").modal("show");
+            $("#IDCard").text(tCate == 1 ? "教员" : "督导");
+            $("#Modal").attr("tID", tID);
+            $("#Modal").attr("tCate", tCate);
+            $.getJSON("/TrainClassTeachers/GetTrainClass", { tID: tID, tCate: tCate, type: type }, function (res) {
+                $("#tabTranClass tbody").empty();
+               
+                for(var t=0;t<res.length;t++)
+                {
+                   
+                    var a = $("<tr>" +                               
+                                "<td><input type='checkbox' value='" + res[t].TC_ID + "' " + (res[t].T_ID == tID?"checked='checked'":"") + " /></td>" +
+                                "<td>" + res[t].TC_Name + "</td>" +
+                                "<td>" + (res[t].T_Name == null ? "" : res[t].T_Name) + "</td>" +
+                                "</tr>");
+                    $("#tabTranClass tbody").append(a);
+                }
+                //<input type='checkbox' value='" + res[t].TC_ID + "' />
+
+            });
+        }
+      
+      
+        $().ready(function () {
+            Serach(1);
+            $("#searchTeacher").click(function () {
+                Serach(1);
+            });
+            $("#SerachTranClass").click(function () {
+                var tID=  $("#Modal").attr("tID");
+                var tCate = $("#Modal").attr("tCate");
+                updateTrainClassTeachers(tID, tCate);
+            });
+            
+            $("#Modal").on('hidden.bs.modal', function () {
+                $("#tabTranClass tbody").empty();
+                $("#rdoAllClass").prop("checked",true);
+                $(":checkbox").prop("checked", false);                                
+            });   
+            $("#save").click(function () {
+                var arry = [];
+                var check = $("#tabTranClass tbody :checkbox:checked");
+            
+                for(var t=0;t<check.length;t++)
+                {
+                    var obj = {
+                        T_ID: $("#Modal").attr("tID"),
+                        TC_ID: check.eq(t).val()
+
+                    }                 
+                    arry.push(obj);
+                }
+                var json = JSON.stringify(arry);
+                var tID = $("#Modal").attr("tID");
+                var tCate = $("#Modal").attr("tCate");
+                $.ajax({
+                    url: "/TrainClassTeachers/Save",
+                    type: "post",
+                    async: true,
+                    data: {json:json,tID:tID,tRole:tCate},
+                    dataType: "text",
+                    success: function (res) {
+                        if(res=="1")
+                        {
+                            $("#Modal").modal("hide");
+                           
+                        }                      
+                        else
+                        {
+                            alert(res);
+                        }
+
+                    }
+                });
+
+            });
+
+          
+        });
+</script>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5878345388ae481c83a6bc5a930b2f2c" Name="Diagram1">
+        <EntityTypeShape EntityType="CRMModel.Floors" Width="1.5" PointX="3" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.Houses" Width="1.5" PointX="0.75" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.OperationLogs" Width="1.5" PointX="12" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.Provinces" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.RoomCategories" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.Rooms" Width="1.5" PointX="5.25" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.SchoolClasses" Width="1.5" PointX="5.25" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.Schools" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.SelectStationPeriods" Width="1.5" PointX="8.25" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.Specialties" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.Stations" Width="1.5" PointX="8.25" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.Students" Width="1.5" PointX="10.5" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.Teachers" Width="1.5" PointX="9.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.TrainClasses" Width="1.5" PointX="5.25" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.TrainClassRooms" Width="1.5" PointX="7.5" PointY="11.375" IsExpanded="true" />
+        <AssociationConnector Association="CRMModel.FK_FLOORS_REFERENCE_HOUSES" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_ROOMS_REFERENCE_FLOORS" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_OPERATIO_REFERENCE_TEACHERS" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_SCHOOLS_REFERENCE_PROVINCE" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_ROOMS_REFERENCE_ROOMCATE" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_TRAINCLAS_REFERENCE_ROOMS" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_SCHOOLCL_REFERENCE_SCHOOLS" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_SCHOOLCL_REFERENCE_SPECIALT" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_STUDENTS_REFERENCE_SCHOOLCL" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_SELECTST_REFERENCE_SCHOOLS" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_SELECTST_REFERENCE_SPECIALT" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_STUDENTS_REFERENCE_STATIONS" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMModel.FK_TRAINCLA_REFERENCE_Room" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CRMModel.View_ChooseJobs" Width="1.5" PointX="6" PointY="0.5" />
+        <EntityTypeShape EntityType="CRMModel.View_TrainClasses" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CRMModel.TrainClassTeachers" Width="1.5" PointX="13.375" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMModel.View_SchoolS" Width="1.5" PointX="13.375" PointY="7.75" />
+        <EntityTypeShape EntityType="CRMModel.View_Stations" Width="1.5" PointX="0.75" PointY="14.75" />
+        <EntityTypeShape EntityType="CRMModel.SpecialtyStations" Width="1.5" PointX="14.375" PointY="11.75" />
+        <EntityTypeShape EntityType="CRMModel.View_TrainTeachers" Width="1.5" PointX="12.375" PointY="14.75" />
+        <EntityTypeShape EntityType="CRMModel.View_Students" Width="1.5" PointX="14.375" PointY="14.75" />
+        <EntityTypeShape EntityType="CRMModel.TrainClassStudents" Width="1.5" PointX="15.75" PointY="8.25" IsExpanded="true" />
+        <AssociationConnector Association="CRMModel.FK_TRAINCLASS_REFERENCE_ROOMS" />
+        <AssociationConnector Association="CRMModel.FK_TRAINCLA_REFERENCE_STUDENTS" />
+        <AssociationConnector Association="CRMModel.FK_TRAINCLA_REFERENCE_Student" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
