@@ -178,6 +178,7 @@ namespace 客户管理系统.Controllers
             ent.Configuration.LazyLoadingEnabled = false;
             var list = ent.TrainClasses.ToList();
             return Json(list);
+            string a = "";
         }
 
 
